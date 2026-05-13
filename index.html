@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Last Drifter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="game-shell" aria-label="The Last Drifter game">
+      <section class="stage" aria-label="Rain soaked bus depot">
+        <canvas id="rain" class="rain" aria-hidden="true"></canvas>
+
+        <div class="skyline" aria-hidden="true">
+          <span class="tower tower-a"></span>
+          <span class="tower tower-b"></span>
+          <span class="tower tower-c"></span>
+          <span class="tower tower-d"></span>
+        </div>
+
+        <div class="depot" aria-hidden="true">
+          <div class="depot-roof"></div>
+          <div class="depot-sign">BAY 17</div>
+          <div class="depot-window"></div>
+          <div class="bench"></div>
+          <div class="payphone"></div>
+          <div class="locker"></div>
+          <div class="puddle puddle-a"></div>
+          <div class="puddle puddle-b"></div>
+        </div>
+
+        <button class="hotspot hotspot-note" data-action="note" aria-label="Inspect the torn note"></button>
+        <button class="hotspot hotspot-payphone" data-action="payphone" aria-label="Inspect the payphone"></button>
+        <button class="hotspot hotspot-locker" data-action="locker" aria-label="Inspect the locker"></button>
+        <button class="hotspot hotspot-bench" data-action="bench" aria-label="Inspect the bench"></button>
+        <button class="hotspot hotspot-road" data-action="road" aria-label="Look down the road"></button>
+
+        <div class="drifter" aria-hidden="true">
+          <div class="hat"></div>
+          <div class="coat"></div>
+          <div class="legs"></div>
+        </div>
+      </section>
+
+      <aside class="hud" aria-label="Game controls">
+        <div class="title-block">
+          <p class="eyebrow">Chapter One</p>
+          <h1>The Last Drifter</h1>
+        </div>
+
+        <div class="verb-row" role="group" aria-label="Actions">
+          <button class="verb is-active" data-verb="look">Look</button>
+          <button class="verb" data-verb="take">Take</button>
+          <button class="verb" data-verb="use">Use</button>
+          <button class="verb" data-verb="talk">Talk</button>
+        </div>
+
+        <section class="panel transcript-panel" aria-label="Narration">
+          <div id="transcript" class="transcript" aria-live="polite"></div>
+        </section>
+
+        <section class="panel" aria-label="Inventory">
+          <div class="panel-heading">
+            <h2>Inventory</h2>
+            <button id="reset" class="icon-button" type="button" title="Restart">Restart</button>
+          </div>
+          <div id="inventory" class="inventory"></div>
+        </section>
+
+        <section class="panel objective-panel" aria-label="Objective">
+          <h2>Objective</h2>
+          <p id="objective"></p>
+        </section>
+      </aside>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
