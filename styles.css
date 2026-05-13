@@ -1,0 +1,581 @@
+:root {
+  color-scheme: dark;
+  --ink: #eef2e6;
+  --muted: #abb4a1;
+  --panel: rgba(18, 21, 22, 0.86);
+  --panel-strong: rgba(10, 12, 13, 0.94);
+  --edge: rgba(238, 242, 230, 0.18);
+  --brass: #cda15d;
+  --rust: #9b4e37;
+  --green: #6f9870;
+  --cyan: #8dbfc7;
+  --charcoal: #121516;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #0c0e10;
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  width: 100vw;
+  height: 100vh;
+}
+
+.stage {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  background:
+    linear-gradient(180deg, rgba(13, 18, 23, 0.2), rgba(9, 10, 11, 0.82) 68%, #070808 100%),
+    radial-gradient(circle at 30% 34%, rgba(141, 191, 199, 0.2), transparent 32%),
+    linear-gradient(155deg, #172026 0%, #101315 48%, #0a0b0c 100%);
+}
+
+.rain {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.skyline {
+  position: absolute;
+  inset: auto 0 26vh;
+  height: 36vh;
+  opacity: 0.56;
+}
+
+.tower {
+  position: absolute;
+  bottom: 0;
+  display: block;
+  width: 12vw;
+  background: linear-gradient(180deg, #151b20, #0e1113);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tower::before {
+  content: "";
+  position: absolute;
+  inset: 12% 16%;
+  background-image: linear-gradient(90deg, transparent 0 42%, rgba(205, 161, 93, 0.32) 44% 54%, transparent 56% 100%);
+  background-size: 26px 100%;
+  opacity: 0.45;
+}
+
+.tower-a {
+  left: 3vw;
+  height: 28vh;
+}
+
+.tower-b {
+  left: 18vw;
+  height: 18vh;
+  width: 16vw;
+}
+
+.tower-c {
+  right: 20vw;
+  height: 32vh;
+  width: 10vw;
+}
+
+.tower-d {
+  right: 4vw;
+  height: 22vh;
+  width: 18vw;
+}
+
+.depot {
+  position: absolute;
+  left: clamp(30px, 6vw, 92px);
+  right: clamp(24px, 7vw, 112px);
+  bottom: 9vh;
+  height: min(58vh, 560px);
+  border-bottom: 26px solid #111314;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 100%) 0 0 / 54px 100%,
+    linear-gradient(180deg, #273030 0%, #1c2221 60%, #151817 100%);
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.55);
+}
+
+.depot-roof {
+  position: absolute;
+  left: -3%;
+  right: -4%;
+  top: -34px;
+  height: 44px;
+  transform: skewX(-12deg);
+  background: linear-gradient(180deg, #4d3a31, #201d1b);
+  border-bottom: 3px solid rgba(205, 161, 93, 0.42);
+}
+
+.depot-sign {
+  position: absolute;
+  top: 24px;
+  left: 34px;
+  width: 132px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(205, 161, 93, 0.55);
+  color: #f4d59b;
+  background: #221917;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.depot-window {
+  position: absolute;
+  top: 102px;
+  left: clamp(150px, 26vw, 360px);
+  width: min(34vw, 430px);
+  height: 190px;
+  border: 8px solid #121514;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(10, 12, 13, 0.82) 50% 52%, transparent 53%),
+    linear-gradient(180deg, rgba(141, 191, 199, 0.52), rgba(205, 161, 93, 0.18));
+  box-shadow: inset 0 0 42px rgba(255, 255, 255, 0.08), 0 8px 0 rgba(0, 0, 0, 0.25);
+}
+
+.bench {
+  position: absolute;
+  left: clamp(44px, 10vw, 170px);
+  bottom: 74px;
+  width: 220px;
+  height: 70px;
+  border-top: 12px solid #6a3f33;
+  border-bottom: 12px solid #3a2a27;
+}
+
+.bench::before,
+.bench::after {
+  content: "";
+  position: absolute;
+  bottom: -48px;
+  width: 12px;
+  height: 48px;
+  background: #151515;
+}
+
+.bench::before {
+  left: 28px;
+}
+
+.bench::after {
+  right: 28px;
+}
+
+.payphone {
+  position: absolute;
+  right: clamp(92px, 18vw, 280px);
+  bottom: 72px;
+  width: 76px;
+  height: 170px;
+  border: 7px solid #141718;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, #39545c, #172226);
+  box-shadow: inset 0 24px 0 rgba(141, 191, 199, 0.18);
+}
+
+.payphone::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 58px;
+  width: 42px;
+  height: 18px;
+  border-radius: 999px;
+  background: #090a0b;
+}
+
+.locker {
+  position: absolute;
+  right: 28px;
+  bottom: 70px;
+  width: 118px;
+  height: 230px;
+  border: 6px solid #151717;
+  background:
+    linear-gradient(90deg, transparent 48%, rgba(0, 0, 0, 0.28) 49% 52%, transparent 53%),
+    linear-gradient(180deg, #513530, #211918);
+}
+
+.locker::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 34px;
+  height: 52px;
+  border-top: 4px solid rgba(238, 242, 230, 0.12);
+  border-bottom: 4px solid rgba(238, 242, 230, 0.12);
+}
+
+.puddle {
+  position: absolute;
+  bottom: -16px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(141, 191, 199, 0.22);
+  filter: blur(1px);
+}
+
+.puddle-a {
+  left: 18%;
+  width: 220px;
+}
+
+.puddle-b {
+  right: 24%;
+  width: 300px;
+}
+
+.drifter {
+  position: absolute;
+  left: 48%;
+  bottom: 10vh;
+  width: 72px;
+  height: 210px;
+  transform: translateX(-50%);
+  z-index: 6;
+  filter: drop-shadow(0 22px 16px rgba(0, 0, 0, 0.5));
+}
+
+.hat {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  width: 52px;
+  height: 18px;
+  background: #11100f;
+  border-bottom: 4px solid #32231f;
+}
+
+.hat::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  bottom: 12px;
+  width: 28px;
+  height: 20px;
+  background: #181311;
+}
+
+.coat {
+  position: absolute;
+  left: 14px;
+  top: 38px;
+  width: 44px;
+  height: 122px;
+  clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #2a2523, #111010);
+}
+
+.legs {
+  position: absolute;
+  left: 22px;
+  top: 154px;
+  width: 28px;
+  height: 52px;
+  border-left: 9px solid #0b0b0c;
+  border-right: 9px solid #0b0b0c;
+}
+
+.hotspot {
+  position: absolute;
+  z-index: 10;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.hotspot:focus-visible {
+  outline: 3px solid var(--brass);
+  outline-offset: 4px;
+}
+
+.hotspot:hover {
+  border-color: rgba(244, 213, 155, 0.7);
+  background: rgba(205, 161, 93, 0.14);
+}
+
+.hotspot-note {
+  left: 24%;
+  bottom: 19vh;
+  width: 52px;
+  height: 34px;
+}
+
+.hotspot-payphone {
+  right: 24%;
+  bottom: 21vh;
+  width: 92px;
+  height: 190px;
+  border-radius: 8px;
+}
+
+.hotspot-locker {
+  right: 7%;
+  bottom: 20vh;
+  width: 132px;
+  height: 250px;
+  border-radius: 8px;
+}
+
+.hotspot-bench {
+  left: 12%;
+  bottom: 19vh;
+  width: 230px;
+  height: 94px;
+  border-radius: 12px;
+}
+
+.hotspot-road {
+  left: 42%;
+  bottom: 4vh;
+  width: 34%;
+  height: 90px;
+}
+
+.hud {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 22px;
+  background:
+    linear-gradient(180deg, rgba(32, 36, 34, 0.97), rgba(11, 12, 12, 0.98)),
+    linear-gradient(90deg, rgba(205, 161, 93, 0.22), transparent 8px);
+  border-left: 1px solid rgba(238, 242, 230, 0.14);
+}
+
+.title-block {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--brass);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 2.6vw, 2.65rem);
+  line-height: 0.95;
+}
+
+h2 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.verb-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.verb,
+.icon-button,
+.inventory button {
+  min-height: 40px;
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.verb:hover,
+.icon-button:hover,
+.inventory button:hover {
+  border-color: rgba(205, 161, 93, 0.7);
+}
+
+.verb.is-active,
+.inventory button.is-selected {
+  color: #15110d;
+  border-color: var(--brass);
+  background: var(--brass);
+}
+
+.panel {
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.transcript-panel {
+  flex: 1 1 auto;
+  min-height: 220px;
+  overflow: hidden;
+}
+
+.transcript {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px;
+  line-height: 1.42;
+}
+
+.line {
+  color: var(--muted);
+}
+
+.line strong {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px 0;
+}
+
+.icon-button {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 0.78rem;
+}
+
+.inventory {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  min-height: 96px;
+  padding: 12px;
+}
+
+.inventory-empty {
+  display: grid;
+  min-height: 72px;
+  place-items: center;
+  color: rgba(238, 242, 230, 0.54);
+  border: 1px dashed var(--edge);
+  border-radius: 6px;
+}
+
+.inventory button {
+  width: 100%;
+  padding: 0 12px;
+  text-align: left;
+}
+
+.objective-panel {
+  padding: 14px;
+}
+
+.objective-panel h2 {
+  margin-bottom: 8px;
+}
+
+.objective-panel p {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+@media (max-width: 920px) {
+  body {
+    overflow: auto;
+  }
+
+  .game-shell {
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+    height: auto;
+  }
+
+  .stage {
+    min-height: 58vh;
+  }
+
+  .hud {
+    min-height: 42vh;
+    border-left: 0;
+    border-top: 1px solid rgba(238, 242, 230, 0.14);
+  }
+
+  .transcript-panel {
+    min-height: 160px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hud {
+    padding: 16px;
+  }
+
+  .verb-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .depot {
+    left: 14px;
+    right: 14px;
+    bottom: 7vh;
+  }
+
+  .depot-window {
+    left: 98px;
+    width: 48vw;
+    height: 150px;
+  }
+
+  .bench {
+    left: 28px;
+    width: 156px;
+  }
+
+  .hotspot-bench {
+    left: 16px;
+    width: 180px;
+  }
+
+  .hotspot-locker {
+    right: 18px;
+    width: 104px;
+  }
+
+  .hotspot-payphone {
+    right: 132px;
+  }
+}
