@@ -1,25 +1,44 @@
 # The Last Drifter
 
-The primary cinematic game source is `The Last Drifter.html`. That uploaded GitHub HTML is the source of truth for the current scenes, pixel canvas, scene picker, dialogue beats, and base game structure.
+The Last Drifter is a static, browser-playable noir pixel adventure about Captain Gabardina and a city where memories are becoming physical.
 
-This repo also includes an experimental first playable HTML slice in `index.html`, `styles.css`, and `game.js`. It adds a point-and-click depot prototype with adventure verbs, inventory, hotspots, rain animation, and a small puzzle chain.
+`index.html` is the public GitHub Pages entry point and the current source of truth for the playable prototype. It preserves the original cinematic rain, title card, canvas rendering, subtitles, and three core scenes, then adds the first adventure-game layer on top.
 
 ## Play
 
-- Open `The Last Drifter.html` for the original cinematic scene prototype.
-- Open `index.html` for the experimental point-and-click depot slice.
+Open `index.html` in a browser, or publish the repo with GitHub Pages from the default branch root.
 
-## Current Depot Slice
+## Current Playable Slice
 
-- One rain-soaked depot scene
-- Four adventure verbs: Look, Take, Use, Talk
-- Inventory selection
-- Hotspots for the note, bench, payphone, locker, and east road
-- A small puzzle chain: note, token, payphone, locker, road
+- Title screen with Start Game, Continue, Scene Select, Settings, and Reset Progress.
+- Three playable scenes: The Alley, The Blood Lab, and The Zoo.
+- Contextual canvas hotspots for investigation instead of a visible verb bar.
+- Case file and evidence collection.
+- Persistent progress with localStorage.
+- Scene completion, objective tracking, debug flag inspection, and reset.
+- Optional generated ambience/audio after the player starts it.
+
+## Scene Flow
+
+1. **The Alley**: Gabardina wakes in heavy rain with a severed hand on his chest, then follows the blood toward a service door.
+2. **The Blood Lab**: An accountant enters a sealed lavatory/lab, restores power, reads the monitors, and recovers a memory reel.
+3. **The Zoo**: A normal morning breaks open when the animals scream, the sign bleeds, and a child explains what is happening.
+
+## Publishing With GitHub Pages
+
+1. Open the repository on GitHub.
+2. Go to **Settings**.
+3. Open **Pages**.
+4. Set the source to the default branch and the repository root.
+5. Save. GitHub Pages will serve `index.html` automatically.
+
+The expected project-page URL is:
+
+`https://joseprendergast.github.io/The-Last-Drifter/`
 
 ## Next Steps
 
-- Build future game systems on top of `The Last Drifter.html`
-- Extract scene data into reusable modules
-- Add point-and-click interactions to the existing cinematic scenes
-- Add save and load support
+- Split the single-file prototype into scene data, renderer, interaction, save, and audio modules once the slice stabilizes.
+- Add more bespoke puzzle logic and dialogue branching inside each scene.
+- Add a proper asset pipeline for custom pixel sprites, sound, and music.
+- Add automated browser smoke tests for title flow, scene transitions, evidence persistence, and mobile layout.
