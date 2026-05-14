@@ -2,13 +2,16 @@
 
 The Last Drifter is a static, browser-playable noir pixel adventure about Captain Gabardina and a city where memories are becoming physical.
 
-`index.html` is the public GitHub Pages entry point and the current source of truth for the playable prototype. It preserves the original cinematic rain, title card, canvas rendering, subtitles, and three core scenes, then adds the first adventure-game layer on top.
+The next playable build upgrades the original cinematic HTML into a full adventure-game slice with title flow, contextual scene hotspots, evidence collection, persistent progress, settings, optional ambience, and debug tools.
 
-## Play
+## Current Repository Status
 
-Open `index.html` in a browser, or publish the repo with GitHub Pages from the default branch root.
+- `index.html` is the GitHub Pages entry point.
+- The original cinematic rain, title card, canvas scenes, subtitles, and scene picker are the foundation.
+- A new local implementation has been prepared to replace the older prototype with a three-scene playable slice.
+- Publishing is complete once the updated `index.html` is committed to the default branch.
 
-## Current Playable Slice
+## Planned Playable Slice
 
 - Title screen with Start Game, Continue, Scene Select, Settings, and Reset Progress.
 - Three playable scenes: The Alley, The Blood Lab, and The Zoo.
@@ -38,7 +41,7 @@ The expected project-page URL is:
 
 ## Next Steps
 
+- Commit the updated playable `index.html` to the default branch.
 - Split the single-file prototype into scene data, renderer, interaction, save, and audio modules once the slice stabilizes.
 - Add more bespoke puzzle logic and dialogue branching inside each scene.
-- Add a proper asset pipeline for custom pixel sprites, sound, and music.
 - Add automated browser smoke tests for title flow, scene transitions, evidence persistence, and mobile layout.
