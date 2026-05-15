@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2881fd1ff121f43c8aa42dcd141f2f6a, type: 3}
+  m_Name: alley
+  m_EditorClassIdentifier: TheLastDrifter.Runtime::TheLastDrifter.Data.SceneDefinition
+  id: alley
+  chapter: Chapter 01
+  title: Rain Alley
+  description: Captain Gabardina enters the rain and finds the first impossible hand.
+  unitySceneName: Chapter01_Alley
+  openingBeats:
+  - speaker: GABARDINA
+    line: Rain makes every street honest. Tonight, it only makes the blood harder
+      to read.
+    holdSeconds: 4
+  - speaker: 
+    line: The coat is already on the floor. One hand waits beside it.
+    holdSeconds: 3

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/TheLastDrifter/Scenes/MainMenu/MainMenu.unity
+    guid: 5a6817d48e4fa499b82a799d3518da84
+  - enabled: 1
+    path: Assets/TheLastDrifter/Scenes/Chapter01_Alley/Chapter01_Alley.unity
+    guid: d9915cd7aee0d41689a7403556b751c3
+  - enabled: 1
+    path: Assets/TheLastDrifter/Scenes/Chapter02_BloodLab/Chapter02_BloodLab.unity
+    guid: 813396fdd80cc495cba763e010111afb
+  - enabled: 1
+    path: Assets/TheLastDrifter/Scenes/Chapter03_Zoo/Chapter03_Zoo.unity
+    guid: 3609b2ed56d744e779a67048bb36546f
+  m_configObjects: {}

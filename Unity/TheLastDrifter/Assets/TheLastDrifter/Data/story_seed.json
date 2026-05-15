@@ -1,0 +1,81 @@
+{
+  "project": "The Last Drifter",
+  "protagonist": "Captain Gabardina",
+  "scenes": [
+    {
+      "id": "alley",
+      "chapter": "I",
+      "title": "The Alley",
+      "mood": "Heavy rain, wet pavement, sodium light, black-blue shadows.",
+      "beats": [
+        "Three minutes past the hour. Heavy rain over the docks.",
+        "Captain Gabardina wakes on wet pavement.",
+        "Something pale rests on his chest.",
+        "A severed hand. Not his own.",
+        "The rain taps the fingers like it expects an answer."
+      ],
+      "hotspots": [
+        "Inspect hand",
+        "Search coat",
+        "Check drain",
+        "Open service door"
+      ],
+      "evidence": [
+        "Severed Hand",
+        "Gabardine Threads",
+        "Blood In Drain"
+      ]
+    },
+    {
+      "id": "blood_lab",
+      "chapter": "II",
+      "title": "The Blood Lab",
+      "mood": "Sub-level lavatory, fluorescent red-white light, alarm flicker, copper and solvent.",
+      "beats": [
+        "The accountant arrives twenty minutes late.",
+        "The keycard reader stutters and lets her through.",
+        "The smell hits before the sight.",
+        "A monitor draws someone's memory in red.",
+        "The lab remembers out loud."
+      ],
+      "hotspots": [
+        "Swipe keycard",
+        "Restore power",
+        "Read monitor",
+        "Take memory reel",
+        "Follow alarm"
+      ],
+      "evidence": [
+        "Sub-Level Keycard",
+        "Alarm Fragment",
+        "Memory Reel"
+      ]
+    },
+    {
+      "id": "zoo",
+      "chapter": "III",
+      "title": "The Zoo",
+      "mood": "False warm morning, families, balloons, screaming animals, sign bleeding.",
+      "beats": [
+        "For the first time since the city stopped sleeping: no rain.",
+        "A queue of families. Coffee steam. Balloons.",
+        "Gabardina notices the birds have stopped.",
+        "Inside the zoo, every animal screams at once.",
+        "A child points and says: They're remembering."
+      ],
+      "hotspots": [
+        "Inspect ticket booth",
+        "Listen for birds",
+        "Watch sign",
+        "Talk to child",
+        "Approach gate"
+      ],
+      "evidence": [
+        "Zoo Ticket",
+        "Bleeding Sign",
+        "Child's Warning"
+      ]
+    }
+  ]
+}
+

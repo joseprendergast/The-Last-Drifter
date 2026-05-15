@@ -22,3 +22,6 @@ Unity/**/*.VC.db
 .DS_Store
 .vscode/
 .idea/
+
+# Local MCP tooling
+Tools/unity-mcp-server/

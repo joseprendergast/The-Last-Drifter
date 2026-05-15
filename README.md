@@ -2,11 +2,13 @@
 
 The Last Drifter is a static, browser-playable noir pixel adventure about Captain Gabardina and a city where memories are becoming physical.
 
-`index.html` is the GitHub Pages entry point for the playable cinematic browser slice. It keeps the rain/noir mood, title card, canvas scenes, subtitles, scene selection, contextual hotspots, evidence, save state, settings, and debug tools.
+`index.html` is the public GitHub Pages entry point and the current source of truth for the playable prototype. It preserves the original cinematic rain, title card, canvas rendering, subtitles, and three core scenes, then adds the first adventure-game layer on top.
 
-The production game now lives in `Unity/TheLastDrifter`. That project is the Unity + URP + Adventure Creator foundation for the full commercial-grade version.
+## Play
 
-## Current Browser Slice
+Open `index.html` in a browser, or publish the repo with GitHub Pages from the default branch root.
+
+## Current Playable Slice
 
 - Title screen with Start Game, Continue, Scene Select, Settings, and Reset Progress.
 - Three playable scenes: The Alley, The Blood Lab, and The Zoo.
@@ -15,14 +17,6 @@ The production game now lives in `Unity/TheLastDrifter`. That project is the Uni
 - Persistent progress with localStorage.
 - Scene completion, objective tracking, debug flag inspection, and reset.
 - Optional generated ambience/audio after the player starts it.
-
-## Unity Production Direction
-
-- Unity 6.3 LTS or newer Unity 6 LTS.
-- Universal Render Pipeline with 2D Renderer.
-- Adventure Creator for point-and-click systems.
-- Pixel Perfect Camera, TextMeshPro, Input System, and URP post-processing.
-- First serious milestone: the Alley vertical slice.
 
 ## Scene Flow
 
@@ -44,7 +38,7 @@ The expected project-page URL is:
 
 ## Next Steps
 
-- Open `Unity/TheLastDrifter` in Unity Hub.
-- Import Adventure Creator through the Unity Asset Store.
+- Continue production in `Unity/TheLastDrifter`.
+- Import Adventure Creator through the Unity Asset Store after opening the Unity project.
 - Build the Alley vertical slice first, using the HTML game as the story and mood reference.
 - Add more bespoke puzzle logic and dialogue branching inside each Unity scene.
