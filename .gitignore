@@ -1,0 +1,24 @@
+# Unity
+Unity/**/Library/
+Unity/**/Temp/
+Unity/**/Obj/
+Unity/**/Build/
+Unity/**/Builds/
+Unity/**/Logs/
+Unity/**/UserSettings/
+Unity/**/MemoryCaptures/
+Unity/**/*.csproj
+Unity/**/*.sln
+Unity/**/*.user
+Unity/**/*.pidb
+Unity/**/*.booproj
+Unity/**/*.svd
+Unity/**/*.pdb
+Unity/**/*.mdb
+Unity/**/*.opendb
+Unity/**/*.VC.db
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
