@@ -39,6 +39,7 @@ The expected project-page URL is:
 ## Next Steps
 
 - Continue production in `Unity/TheLastDrifter`.
-- Import Adventure Creator through the Unity Asset Store after opening the Unity project.
-- Build the Alley vertical slice first, using the HTML game as the story and mood reference.
-- Add more bespoke puzzle logic and dialogue branching inside each Unity scene.
+- Use PowerQuest as the Unity point-and-click framework.
+- Treat the HTML game as the story, mood, and scene reference while PowerQuest becomes the production build.
+- Build the Alley vertical slice first, then split the Blood Lab / Lavatory and Zoo into proper PowerQuest rooms.
+- Replace the imported sample art with bespoke noir character, prop, and room sprites.
