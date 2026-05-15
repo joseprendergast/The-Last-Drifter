@@ -2,9 +2,11 @@
 
 The Last Drifter is a static, browser-playable noir pixel adventure about Captain Gabardina and a city where memories are becoming physical.
 
-`index.html` is now the GitHub Pages entry point for the playable cinematic adventure slice. It keeps the original rain/noir mood, title card, canvas scenes, subtitles, and scene picker direction, then adds game systems on top.
+`index.html` is the GitHub Pages entry point for the playable cinematic browser slice. It keeps the rain/noir mood, title card, canvas scenes, subtitles, scene selection, contextual hotspots, evidence, save state, settings, and debug tools.
 
-## Current Playable Slice
+The production game now lives in `Unity/TheLastDrifter`. That project is the Unity + URP + Adventure Creator foundation for the full commercial-grade version.
+
+## Current Browser Slice
 
 - Title screen with Start Game, Continue, Scene Select, Settings, and Reset Progress.
 - Three playable scenes: The Alley, The Blood Lab, and The Zoo.
@@ -13,6 +15,14 @@ The Last Drifter is a static, browser-playable noir pixel adventure about Captai
 - Persistent progress with localStorage.
 - Scene completion, objective tracking, debug flag inspection, and reset.
 - Optional generated ambience/audio after the player starts it.
+
+## Unity Production Direction
+
+- Unity 6.3 LTS or newer Unity 6 LTS.
+- Universal Render Pipeline with 2D Renderer.
+- Adventure Creator for point-and-click systems.
+- Pixel Perfect Camera, TextMeshPro, Input System, and URP post-processing.
+- First serious milestone: the Alley vertical slice.
 
 ## Scene Flow
 
@@ -34,7 +44,7 @@ The expected project-page URL is:
 
 ## Next Steps
 
-- Split the single-file prototype into scene data, renderer, interaction, save, and audio modules once the slice stabilizes.
-- Add more bespoke puzzle logic and dialogue branching inside each scene.
-- Add a proper asset pipeline for custom pixel sprites, sound, and music.
-- Add automated browser smoke tests for title flow, scene transitions, evidence persistence, and mobile layout.
+- Open `Unity/TheLastDrifter` in Unity Hub.
+- Import Adventure Creator through the Unity Asset Store.
+- Build the Alley vertical slice first, using the HTML game as the story and mood reference.
+- Add more bespoke puzzle logic and dialogue branching inside each Unity scene.
