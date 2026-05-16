@@ -1060,7 +1060,7 @@ public partial class QuestClickableEditorUtils
 		textStyle.normal.textColor = GUI.color;
 
 		EditorGUI.BeginChangeCheck();
-		position = Handles.FreeMoveHandle( position, Quaternion.identity,4.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap);
+		var fmh_1063_48_639144726314528480 = Quaternion.identity; position = Handles.FreeMoveHandle( position,4.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap);
 
 		Handles.Label(position + new Vector3(5*scale,0,0), "Baseline", textStyle);
 		Handles.color = Color.cyan.WithAlpha(0.5f);
@@ -1110,7 +1110,7 @@ public partial class QuestClickableEditorUtils
 			textStyle.normal.textColor = GUI.color;
 					
 			EditorGUI.BeginChangeCheck();
-			position = Handles.FreeMoveHandle( position, Quaternion.identity,2f*scale,new Vector3(0,1,0),Handles.DotHandleCap);
+			var fmh_1113_49_639144726314538020 = Quaternion.identity; position = Handles.FreeMoveHandle( position,2f*scale,new Vector3(0,1,0),Handles.DotHandleCap);
 			Handles.Label(position + new Vector3(2.1f*scale,0,0), "Walk To", textStyle);			
 			if ( EditorGUI.EndChangeCheck() ) 
 			{
@@ -1126,7 +1126,7 @@ public partial class QuestClickableEditorUtils
 			textStyle.normal.textColor = GUI.color;
 			
 			EditorGUI.BeginChangeCheck();
-			position = Handles.FreeMoveHandle( position, Quaternion.identity,2.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap);
+			var fmh_1129_49_639144726314542900 = Quaternion.identity; position = Handles.FreeMoveHandle( position,2.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap);
 			Handles.Label(position + new Vector3(2.1f*scale,0,0), "Look At", textStyle);
 			if ( EditorGUI.EndChangeCheck() ) 
 			{

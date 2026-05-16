@@ -189,11 +189,11 @@ public class SystemTime : Singleton<SystemTime>
 				Rigidbody2D body = obj.GetComponent<Rigidbody2D>();
 				if (body != null && body.isKinematic == false )
 				{
-					m_pausedVelocities.Add( body.velocity );
+					m_pausedVelocities.Add( body.linearVelocity );
 					m_pausedAngularVelocities.Add( body.angularVelocity );
 					m_pausedBodies.Add( body);
 					body.isKinematic = true;
-					body.velocity = Vector2.zero; 
+					body.linearVelocity = Vector2.zero; 
 					body.angularVelocity = 0;
 				}				
 								
@@ -257,7 +257,7 @@ public class SystemTime : Singleton<SystemTime>
 				if ( body != null )
 				{
 					body.isKinematic = false;
-					body.velocity = m_pausedVelocities[i];					
+					body.linearVelocity = m_pausedVelocities[i];					
 					body.angularVelocity = m_pausedAngularVelocities[i];	
 					body.WakeUp();
 				}

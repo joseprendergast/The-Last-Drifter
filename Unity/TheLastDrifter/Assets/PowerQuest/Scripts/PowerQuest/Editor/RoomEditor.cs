@@ -97,7 +97,7 @@ public class RoomComponentEditor : Editor
 				textStyle.normal.textColor = GUI.color;
 				{
 					Vector3 position =  new Vector3( roomScrollBounds.MinX, roomScrollBounds.MinY, 0);
-					position = Handles.FreeMoveHandle( position+Vector3.one*scale, Quaternion.identity,1.0f*scale,new Vector3(1,1,0),Handles.DotHandleCap)-Vector3.one*scale;
+					var fmh_100_69_639144726307285390 = Quaternion.identity; position = Handles.FreeMoveHandle( position+Vector3.one*scale,1.0f*scale,new Vector3(1,1,0),Handles.DotHandleCap)-Vector3.one*scale;
 					Handles.Label(position + new Vector3(5*scale,0,0), "Scroll", textStyle);
 					position.x = Mathf.Min(position.x,roomScrollBounds.MaxX);
 					position.y = Mathf.Min(position.y,roomScrollBounds.MaxY);
@@ -107,7 +107,7 @@ public class RoomComponentEditor : Editor
 				}
 				{
 					Vector3 position =  new Vector3( roomScrollBounds.MaxX, roomScrollBounds.MaxY, 0);
-					position = Handles.FreeMoveHandle( position-Vector3.one*scale, Quaternion.identity,1.0f*scale,new Vector3(1,1,0),Handles.DotHandleCap)+Vector3.one*scale;
+					var fmh_110_69_639144726307293590 = Quaternion.identity; position = Handles.FreeMoveHandle( position-Vector3.one*scale,1.0f*scale,new Vector3(1,1,0),Handles.DotHandleCap)+Vector3.one*scale;
 
 					position.x = Mathf.Max(position.x,roomScrollBounds.MinX);
 					position.y = Mathf.Max(position.y,roomScrollBounds.MinY);
@@ -128,7 +128,7 @@ public class RoomComponentEditor : Editor
 			textStyle.normal.textColor = GUI.color;
 			{
 				Vector3 position =  new Vector3( roomBounds.MinX, roomBounds.MinY, 0);
-				position = Handles.FreeMoveHandle( position+Vector3.one*scale, Quaternion.identity,1.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap)-Vector3.one*scale;
+				var fmh_131_68_639144726307300290 = Quaternion.identity; position = Handles.FreeMoveHandle( position+Vector3.one*scale,1.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap)-Vector3.one*scale;
 				Handles.Label(position + new Vector3(5*scale,0,0), "Bounds", textStyle );
 				//Handles.color = Color.yellow.WithAlpha(0.5f);
 				position.x = Mathf.Min(position.x,roomBounds.MaxX);
@@ -137,7 +137,7 @@ public class RoomComponentEditor : Editor
 			}
 			{
 				Vector3 position =  new Vector3( roomBounds.MaxX, roomBounds.MaxY, 0);
-				position = Handles.FreeMoveHandle( position-Vector3.one*scale, Quaternion.identity,1.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap)+Vector3.one*scale;
+				var fmh_140_68_639144726307335990 = Quaternion.identity; position = Handles.FreeMoveHandle( position-Vector3.one*scale,1.0f*scale,new Vector3(0,1,0),Handles.DotHandleCap)+Vector3.one*scale;
 
 				position.x = Mathf.Max(position.x,roomBounds.MinX);
 				position.y = Mathf.Max(position.y,roomBounds.MinY);

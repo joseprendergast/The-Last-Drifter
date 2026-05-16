@@ -257,7 +257,7 @@ public class ControlEditorBase : Editor
 				Vector3 handleOffset = new Vector3(-1,1,0);
 				{
 					Vector3 position =  new Vector3( bounds.MaxX, bounds.MinY, 0);
-					position = Handles.FreeMoveHandle( position+handleOffset, Quaternion.identity,1.0f,new Vector3(0,1,0),Handles.DotHandleCap)-handleOffset;
+					var fmh_260_64_639144726307364610 = Quaternion.identity; position = Handles.FreeMoveHandle( position+handleOffset,1.0f,new Vector3(0,1,0),Handles.DotHandleCap)-handleOffset;
 					//Handles.Label(position + new Vector3(5,0,0), "Bounds", textStyle );
 					//Handles.color = Color.yellow.WithAlpha(0.5f);
 					position.x = Mathf.Max(position.x,bounds.MinX);
@@ -269,7 +269,7 @@ public class ControlEditorBase : Editor
 				}
 				{
 					Vector3 position =  new Vector3( bounds.MinX, bounds.MaxY, 0);
-					position = Handles.FreeMoveHandle( position-handleOffset, Quaternion.identity,1.0f,new Vector3(0,1,0),Handles.DotHandleCap)+handleOffset;
+					var fmh_272_64_639144726307368830 = Quaternion.identity; position = Handles.FreeMoveHandle( position-handleOffset,1.0f,new Vector3(0,1,0),Handles.DotHandleCap)+handleOffset;
 
 					position.x = Mathf.Min(position.x,bounds.MaxX);
 					position.y = Mathf.Max(position.y,bounds.MinY);

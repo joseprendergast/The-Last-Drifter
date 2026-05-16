@@ -98,10 +98,10 @@ public class PowerSpriteEditor : Editor
 		Color oldCol = Handles.color;
 		Handles.color = Color.green;
 		Handles.DrawLine((Vector2)component.transform.position + component.Offset, (Vector2)component.transform.position + component.Offset + Vector2.right);
-		pos.x = Handles.FreeMoveHandle( (Vector2)component.transform.position + component.Offset + Vector2.right, Quaternion.identity,0.4f,Vector3.zero, Handles.SphereHandleCap).x;
+		var fmh_101_109_639144726302485050 = Quaternion.identity; pos.x = Handles.FreeMoveHandle( (Vector2)component.transform.position + component.Offset + Vector2.right,0.4f,Vector3.zero, Handles.SphereHandleCap).x;
 		Handles.color = Color.red;
 		Handles.DrawLine((Vector2)component.transform.position + component.Offset, (Vector2)component.transform.position + component.Offset + Vector2.up);
-		pos.y = Handles.FreeMoveHandle( (Vector2)component.transform.position + component.Offset + Vector2.up, Quaternion.identity,0.4f,Vector3.zero, Handles.SphereHandleCap).y;
+		var fmh_104_106_639144726302518320 = Quaternion.identity; pos.y = Handles.FreeMoveHandle( (Vector2)component.transform.position + component.Offset + Vector2.up,0.4f,Vector3.zero, Handles.SphereHandleCap).y;
 
 		Handles.color = oldCol;
 

@@ -1,12 +1,16 @@
 # The Last Drifter
 
-The Last Drifter is a static, browser-playable noir pixel adventure about Captain Gabardina and a city where memories are becoming physical.
+The Last Drifter is a noir point-and-click adventure about Captain Gabardina and a city where memories are becoming physical.
 
-`index.html` is the public GitHub Pages entry point and the current source of truth for the playable prototype. It preserves the original cinematic rain, title card, canvas rendering, subtitles, and three core scenes, then adds the first adventure-game layer on top.
+The public GitHub Pages build now lives in `docs/` and is exported from the Unity + PowerQuest production project. The original root `index.html` browser prototype remains in the repo as a fast story, mood, and scene reference.
 
 ## Play
 
-Open `index.html` in a browser, or publish the repo with GitHub Pages from the default branch root.
+Open the published build at:
+
+`https://joseprendergast.github.io/The-Last-Drifter/`
+
+For quick reference work, the old HTML prototype can still be opened from `index.html`.
 
 ## Current Playable Slice
 
@@ -29,8 +33,8 @@ Open `index.html` in a browser, or publish the repo with GitHub Pages from the d
 1. Open the repository on GitHub.
 2. Go to **Settings**.
 3. Open **Pages**.
-4. Set the source to the default branch and the repository root.
-5. Save. GitHub Pages will serve `index.html` automatically.
+4. Set the source to the default branch and the `/docs` folder.
+5. Save. GitHub Pages will serve the Unity WebGL build from `docs/index.html`.
 
 The expected project-page URL is:
 

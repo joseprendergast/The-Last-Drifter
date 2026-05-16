@@ -25,3 +25,6 @@ Unity/**/*.VC.db
 
 # Local MCP tooling
 Tools/unity-mcp-server/
+
+# GitHub Pages serves the unpacked Unity WebGL files.
+docs/Build/*.gz

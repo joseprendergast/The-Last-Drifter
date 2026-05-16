@@ -30,7 +30,7 @@ public class SortableEditor : Editor
 			textStyle.normal.textColor = GUI.color;
 
 			EditorGUI.BeginChangeCheck();
-			position = Handles.FreeMoveHandle( position, Quaternion.identity,4.0f,new Vector3(0,1,0),Handles.DotHandleCap);
+			var fmh_33_49_639144726306817110 = Quaternion.identity; position = Handles.FreeMoveHandle( position,4.0f,new Vector3(0,1,0),Handles.DotHandleCap);
 
 			Handles.Label(position + new Vector3(5,0,0), "Baseline", textStyle);
 			Handles.color = Color.cyan.WithAlpha(0.5f);
