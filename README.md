@@ -2,7 +2,7 @@
 
 The Last Drifter is a noir point-and-click adventure about Captain Gabardina and a city where memories are becoming physical.
 
-The public GitHub Pages build now lives in `docs/` and is exported from the Unity + PowerQuest production project. The original root `index.html` browser prototype remains in the repo as a fast story, mood, and scene reference.
+The public GitHub Pages build now lives in `docs/` and is exported from the Unity + PowerQuest production project. The original browser prototype remains in the repo as `prototype.html` for fast story, mood, and scene reference.
 
 ## Play
 
@@ -10,7 +10,7 @@ Open the published build at:
 
 `https://joseprendergast.github.io/The-Last-Drifter/`
 
-For quick reference work, the old HTML prototype can still be opened from `index.html`.
+For quick reference work, the old HTML prototype can still be opened from `prototype.html`.
 
 ## Current Playable Slice
 
