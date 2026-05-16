@@ -35,17 +35,20 @@ public partial class GlobalScript : GlobalScriptBase<GlobalScript>
 	
 	/// Called when game first starts
 	public void OnGameStart()
-	{     
+	{
+		DrifterActionToolbar.Ensure();
 	} 
 
 	/// Called after restoring a game. Use this if you need to update any references based on saved data.
 	public void OnPostRestore(int version)
 	{
+		DrifterActionToolbar.Ensure();
 	}
 
 	/// Blocking script called whenever you enter a room, before fading in. Non-blocking functions only
 	public void OnEnterRoom()
 	{
+		DrifterActionToolbar.Ensure();
 	}
 
 	/// Blocking script called whenever you enter a room, after fade in is complete
@@ -189,6 +192,9 @@ public partial class GlobalScript : GlobalScriptBase<GlobalScript>
 	/// Called when the mouse is clicked in the game screen. Use this to customise your game interface by calling E.ProcessClick() with the verb that should be used. By default this is set up for a 2 click interface
 	public void OnMouseClick( bool leftClick, bool rightClick )
 	{
+		if ( DrifterActionToolbar.PointerOverToolbar() )
+			return;
+
 		bool mouseOverSomething = E.GetMouseOverClickable() != null;
 		
 		// Check if should clear inventory
@@ -207,6 +213,18 @@ public partial class GlobalScript : GlobalScriptBase<GlobalScript>
 		}
 		else if ( leftClick ) // Checks if player left clicked
 		{
+			if ( DrifterActionToolbar.Mode == DrifterActionToolbar.ToolMode.Look && mouseOverSomething )
+			{
+				E.ProcessClick( eQuestVerb.Look );
+				return;
+			}
+
+			if ( DrifterActionToolbar.Mode == DrifterActionToolbar.ToolMode.Walk )
+			{
+				E.ProcessClick( eQuestVerb.Walk );
+				return;
+			}
+
 			if ( mouseOverSomething ) // Check if they clicked on anything
 			{
 				if ( C.Plr.HasActiveInventory && Cursor.InventoryCursorOverridden == false )
