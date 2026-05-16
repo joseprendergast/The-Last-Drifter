@@ -12,7 +12,7 @@ public class RoomForest : RoomScript<RoomForest>
     {
         Globals.m_drifterProgress = eDrifterCaseProgress.EnteredAlley;
         G.InventoryBar.Show();
-        G.Toolbar.Show();
+        G.Toolbar.Hide();
     }
 
     public IEnumerator OnEnterRoomAfterFade()
