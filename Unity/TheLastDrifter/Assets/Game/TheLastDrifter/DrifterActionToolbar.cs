@@ -16,18 +16,16 @@ public class DrifterActionToolbar : MonoBehaviour
     static Rect s_toolbarRect;
 
     GUIStyle m_labelStyle;
-    GUIStyle m_smallStyle;
-    string m_status = "Use";
+    string m_status = "Use / Inspect";
     string m_hover = string.Empty;
 
     readonly ToolButton[] m_buttons =
     {
-        new ToolButton("Use", "Use / Inspect", ToolMode.Interact, ToolButtonKind.Hand),
-        new ToolButton("Look", "Look closer", ToolMode.Look, ToolButtonKind.Eye),
-        new ToolButton("Walk", "Walk", ToolMode.Walk, ToolButtonKind.Boot),
-        new ToolButton("Case", "Evidence drawer", ToolMode.Interact, ToolButtonKind.File),
-        new ToolButton("Save", "Save game", ToolMode.Interact, ToolButtonKind.Card),
-        new ToolButton("Gear", "Options", ToolMode.Interact, ToolButtonKind.Gear)
+        new ToolButton("Question", "Look closer", ToolMode.Look, ToolButtonKind.Question),
+        new ToolButton("Evidence", "Inspect evidence", ToolMode.Interact, ToolButtonKind.HandClue),
+        new ToolButton("Case", "Evidence drawer", ToolMode.Interact, ToolButtonKind.Keycard),
+        new ToolButton("Use", "Use / Inspect", ToolMode.Interact, ToolButtonKind.Detective),
+        new ToolButton("Walk", "Walk", ToolMode.Walk, ToolButtonKind.Boot)
     };
 
     public static ToolMode Mode { get { return s_mode; } }
@@ -61,32 +59,28 @@ public class DrifterActionToolbar : MonoBehaviour
 
         EnsureStyles();
 
-        float scale = Mathf.Clamp(Screen.height / 600f, 1f, 2f);
-        float barHeight = Mathf.Round(74f * scale);
-        float border = Mathf.Max(4f, Mathf.Round(5f * scale));
-        float cell = Mathf.Round(48f * scale);
-        float gap = Mathf.Round(8f * scale);
-        float startX = Mathf.Round(36f * scale);
-        float top = 0f;
-        float labelY = Mathf.Round(78f * scale);
+        float scale = Mathf.Clamp(Screen.height / 600f, 1f, 2.25f);
+        float slot = Mathf.Round(92f * scale);
+        float gap = Mathf.Round(10f * scale);
+        float bottomPad = Mathf.Round(24f * scale);
+        float dockWidth = m_buttons.Length * slot + (m_buttons.Length - 1) * gap;
+        float startX = Mathf.Round((Screen.width - dockWidth) * 0.5f);
+        float startY = Mathf.Round(Screen.height - bottomPad - slot);
 
-        s_toolbarRect = new Rect(0, 0, Screen.width, barHeight + Mathf.Round(12f * scale));
-
-        DrawBarFrame(barHeight, border, scale);
+        s_toolbarRect = new Rect(startX - Mathf.Round(10f * scale), startY - Mathf.Round(8f * scale), dockWidth + Mathf.Round(20f * scale), slot + Mathf.Round(18f * scale));
 
         Event evt = Event.current;
         Vector2 mouse = evt.mousePosition;
         m_hover = string.Empty;
 
+        DrawTopFrame(scale);
+        DrawSceneLabel(GetDisplayText(), scale);
+
         for (int i = 0; i < m_buttons.Length; i++)
         {
-            Rect cellRect = new Rect(startX + i * (cell + gap), top + Mathf.Round(9f * scale), cell, cell);
-            DrawButton(cellRect, m_buttons[i], scale, mouse, evt);
+            Rect slotRect = new Rect(startX + i * (slot + gap), startY, slot, slot);
+            DrawButton(slotRect, m_buttons[i], scale, mouse, evt);
         }
-
-        string sceneHover = GetSceneHoverText();
-        string text = !string.IsNullOrEmpty(m_hover) ? m_hover : (!string.IsNullOrEmpty(sceneHover) ? sceneHover : m_status);
-        DrawHoverLabel(text, labelY, scale);
     }
 
     bool ShouldHide()
@@ -105,44 +99,74 @@ public class DrifterActionToolbar : MonoBehaviour
 
         m_labelStyle = new GUIStyle(GUI.skin.label);
         m_labelStyle.alignment = TextAnchor.MiddleCenter;
-        m_labelStyle.normal.textColor = new Color(0.78f, 0.74f, 0.62f);
+        m_labelStyle.normal.textColor = new Color(0.82f, 0.78f, 0.66f);
         m_labelStyle.fontStyle = FontStyle.Bold;
         m_labelStyle.wordWrap = false;
-
-        m_smallStyle = new GUIStyle(m_labelStyle);
-        m_smallStyle.normal.textColor = new Color(0.45f, 0.58f, 0.56f);
     }
 
-    void DrawBarFrame(float barHeight, float border, float scale)
+    string GetDisplayText()
     {
-        Color dark = new Color(0.025f, 0.035f, 0.05f, 0.96f);
-        Color edge = new Color(0.20f, 0.32f, 0.31f, 1f);
-        Color shadow = new Color(0f, 0f, 0f, 0.8f);
+        if (!string.IsNullOrEmpty(m_hover))
+            return m_hover;
 
-        Rect full = new Rect(0, 0, Screen.width, barHeight);
-        Fill(full, dark);
-        Fill(new Rect(0, barHeight - border, Screen.width, border), edge);
-        Fill(new Rect(0, barHeight, Screen.width, Mathf.Round(5f * scale)), shadow);
+        string sceneHover = GetSceneHoverText();
+        return !string.IsNullOrEmpty(sceneHover) ? sceneHover : m_status;
+    }
 
-        float notchW = Mathf.Round(112f * scale);
-        float notchH = Mathf.Round(16f * scale);
-        float notchX = Mathf.Round((Screen.width - notchW) * 0.5f);
-        Fill(new Rect(notchX, barHeight - border, notchW, notchH), edge);
-        Fill(new Rect(notchX + border, barHeight - border, notchW - border * 2f, notchH - border), dark);
-        Fill(new Rect(0, 0, Screen.width, border), new Color(0.01f, 0.014f, 0.02f, 1f));
+    void DrawTopFrame(float scale)
+    {
+        float h = Mathf.Round(18f * scale);
+        float edge = Mathf.Max(3f, Mathf.Round(4f * scale));
+        float notchW = Mathf.Round(62f * scale);
+        float notchH = Mathf.Round(22f * scale);
+        Color shadow = new Color(0.01f, 0.018f, 0.026f, 0.88f);
+        Color edgeColor = new Color(0.20f, 0.34f, 0.33f, 0.96f);
+        Color dark = new Color(0.025f, 0.05f, 0.065f, 0.86f);
+
+        Fill(new Rect(0, 0, Screen.width, h), shadow);
+        Fill(new Rect(0, h - edge, Screen.width, edge), edgeColor);
+
+        DrawTopNotch(Mathf.Round(Screen.width * 0.12f), h, notchW, notchH, edge, dark, edgeColor);
+        DrawTopNotch(Mathf.Round(Screen.width * 0.50f - notchW * 0.5f), h, notchW, notchH, edge, dark, edgeColor);
+        DrawTopNotch(Mathf.Round(Screen.width * 0.88f - notchW), h, notchW, notchH, edge, dark, edgeColor);
+    }
+
+    void DrawTopNotch(float x, float y, float w, float h, float edge, Color dark, Color edgeColor)
+    {
+        Fill(new Rect(x, y - edge, w, h), edgeColor);
+        Fill(new Rect(x + edge, y - edge, w - edge * 2f, h - edge), dark);
+        Fill(new Rect(x + w * 0.42f, y + h * 0.32f, w * 0.16f, h * 0.16f), new Color(0.30f, 0.43f, 0.41f, 1f));
+    }
+
+    void DrawSceneLabel(string text, float scale)
+    {
+        if (string.IsNullOrEmpty(text))
+            return;
+
+        m_labelStyle.fontSize = Mathf.RoundToInt(26f * scale);
+        float y = Mathf.Round(22f * scale);
+        float h = Mathf.Round(38f * scale);
+        Rect shadow = new Rect(0, y + Mathf.Round(3f * scale), Screen.width, h);
+        Rect rect = new Rect(0, y, Screen.width, h);
+        Color old = GUI.color;
+        GUI.color = new Color(0f, 0f, 0f, 0.82f);
+        GUI.Label(shadow, text, m_labelStyle);
+        GUI.color = Color.white;
+        GUI.Label(rect, text, m_labelStyle);
+        GUI.color = old;
     }
 
     void DrawButton(Rect rect, ToolButton button, float scale, Vector2 mouse, Event evt)
     {
         bool over = rect.Contains(mouse);
-        bool active = (button.Mode == s_mode && button.Kind != ToolButtonKind.File && button.Kind != ToolButtonKind.Card && button.Kind != ToolButtonKind.Gear);
+        bool active = button.Mode == s_mode && button.Kind != ToolButtonKind.Keycard;
+        if (button.Kind == ToolButtonKind.Detective)
+            active = s_mode == ToolMode.Interact;
 
-        Fill(rect, active ? new Color(0.08f, 0.14f, 0.14f, 1f) : new Color(0.035f, 0.045f, 0.065f, 1f));
-        Fill(new Rect(rect.x, rect.y, rect.width, Mathf.Max(2f, 2f * scale)), new Color(0.25f, 0.38f, 0.35f, over ? 1f : 0.65f));
-        Fill(new Rect(rect.x, rect.yMax - Mathf.Max(3f, 3f * scale), rect.width, Mathf.Max(3f, 3f * scale)), new Color(0.02f, 0.025f, 0.035f, 1f));
+        DrawSlot(rect, active, over, scale);
 
-        Color icon = over || active ? new Color(0.78f, 0.76f, 0.64f, 1f) : new Color(0.31f, 0.45f, 0.43f, 1f);
-        DrawIcon(rect, button.Kind, icon, scale);
+        Color main = over || active ? new Color(0.72f, 0.88f, 0.86f, 1f) : new Color(0.27f, 0.43f, 0.43f, 1f);
+        DrawIcon(rect, button.Kind, main, scale, active);
 
         if (over)
         {
@@ -155,26 +179,31 @@ public class DrifterActionToolbar : MonoBehaviour
         }
     }
 
+    void DrawSlot(Rect rect, bool active, bool over, float scale)
+    {
+        float b = Mathf.Max(4f, Mathf.Round(5f * scale));
+        Color outer = active ? new Color(0.86f, 0.93f, 0.90f, 1f) : new Color(0.12f, 0.24f, 0.25f, 0.92f);
+        Color mid = active ? new Color(0.25f, 0.72f, 0.73f, 1f) : new Color(0.24f, 0.31f, 0.32f, 0.9f);
+        Color inner = active ? new Color(0.08f, 0.19f, 0.19f, 0.96f) : new Color(0.04f, 0.055f, 0.07f, 0.82f);
+
+        Fill(new Rect(rect.x + b, rect.y + b, rect.width, rect.height), new Color(0f, 0f, 0f, 0.55f));
+        Fill(rect, outer);
+        Fill(new Rect(rect.x + b, rect.y + b, rect.width - b * 2f, rect.height - b * 2f), mid);
+        Fill(new Rect(rect.x + b * 2f, rect.y + b * 2f, rect.width - b * 4f, rect.height - b * 4f), inner);
+
+        if (!active && !over)
+            Fill(new Rect(rect.x + b * 2f, rect.y + b * 2f, rect.width - b * 4f, rect.height - b * 4f), new Color(0f, 0f, 0f, 0.34f));
+
+        Fill(new Rect(rect.x + b * 2f, rect.y + b * 2f, rect.width - b * 4f, Mathf.Max(2f, b * 0.5f)), new Color(0.42f, 0.56f, 0.54f, active ? 0.85f : 0.38f));
+        Fill(new Rect(rect.x + b * 2f, rect.yMax - b * 2.5f, rect.width - b * 4f, b), new Color(0f, 0f, 0f, 0.58f));
+    }
+
     void Activate(ToolButton button)
     {
-        if (button.Kind == ToolButtonKind.File)
+        if (button.Kind == ToolButtonKind.Keycard)
         {
             G.InventoryBar.Show();
             m_status = "Evidence drawer";
-            return;
-        }
-
-        if (button.Kind == ToolButtonKind.Card)
-        {
-            GuiSave.Script.ShowSave();
-            m_status = "Save game";
-            return;
-        }
-
-        if (button.Kind == ToolButtonKind.Gear)
-        {
-            G.Options.Show();
-            m_status = "Options";
             return;
         }
 
@@ -191,60 +220,50 @@ public class DrifterActionToolbar : MonoBehaviour
         return string.IsNullOrEmpty(description) ? string.Empty : description;
     }
 
-    void DrawHoverLabel(string text, float y, float scale)
+    void DrawIcon(Rect r, ToolButtonKind kind, Color c, float scale, bool active)
     {
-        if (string.IsNullOrEmpty(text))
-            return;
-
-        m_labelStyle.fontSize = Mathf.RoundToInt(22f * scale);
-        Rect shadow = new Rect(0, y + Mathf.Round(2f * scale), Screen.width, Mathf.Round(32f * scale));
-        Rect rect = new Rect(0, y, Screen.width, Mathf.Round(32f * scale));
-        Color old = GUI.color;
-        GUI.color = new Color(0f, 0f, 0f, 0.8f);
-        GUI.Label(shadow, text, m_labelStyle);
-        GUI.color = Color.white;
-        GUI.Label(rect, text, m_labelStyle);
-        GUI.color = old;
-    }
-
-    void DrawIcon(Rect r, ToolButtonKind kind, Color c, float scale)
-    {
-        float u = Mathf.Max(2f, Mathf.Round(3f * scale));
-        Rect inner = new Rect(r.x + r.width * 0.22f, r.y + r.height * 0.18f, r.width * 0.56f, r.height * 0.62f);
+        float u = Mathf.Max(2f, Mathf.Round(4f * scale));
+        Rect inner = new Rect(r.x + r.width * 0.17f, r.y + r.height * 0.14f, r.width * 0.66f, r.height * 0.70f);
+        Color ink = new Color(0.01f, 0.018f, 0.025f, 1f);
+        Color highlight = active ? Color.white : new Color(0.55f, 0.70f, 0.68f, 1f);
 
         switch (kind)
         {
-            case ToolButtonKind.Hand:
-                Fill(new Rect(inner.x + u * 2, inner.y + u * 6, inner.width - u * 4, u * 4), c);
-                for (int i = 0; i < 4; i++)
-                    Fill(new Rect(inner.x + u * (1 + i * 2), inner.y + u * (1 + i % 2), u * 2, u * 8), c);
-                Fill(new Rect(inner.x, inner.y + u * 8, u * 4, u * 3), c);
+            case ToolButtonKind.Question:
+                Fill(new Rect(inner.x + u * 2, inner.y + u * 1, inner.width - u * 4, u * 5), c);
+                Fill(new Rect(inner.x + inner.width - u * 5, inner.y + u * 4, u * 5, u * 5), c);
+                Fill(new Rect(inner.x + inner.width * 0.46f, inner.y + u * 8, u * 5, u * 8), c);
+                Fill(new Rect(inner.x + inner.width * 0.46f, inner.y + inner.height - u * 5, u * 5, u * 5), c);
+                Fill(new Rect(inner.x + u * 5, inner.y + u * 5, inner.width - u * 10, u * 4), ink);
                 break;
-            case ToolButtonKind.Eye:
-                Fill(new Rect(inner.x + u * 2, inner.y + u * 4, inner.width - u * 4, u * 3), c);
-                Fill(new Rect(inner.x, inner.y + u * 6, inner.width, u * 5), c);
-                Fill(new Rect(inner.x + inner.width * 0.42f, inner.y + u * 5, u * 4, u * 6), Color.black);
+            case ToolButtonKind.HandClue:
+                Fill(new Rect(inner.x + u * 2, inner.y + u * 10, inner.width - u * 4, u * 7), c);
+                Fill(new Rect(inner.x + u * 4, inner.y + u * 6, inner.width - u * 8, u * 6), new Color(0.45f, 0.58f, 0.58f, 1f));
+                Fill(new Rect(inner.x + u * 6, inner.y + u * 3, u * 13, u * 5), highlight);
+                Fill(new Rect(inner.x + u * 14, inner.y + u * 1, u * 7, u * 5), highlight);
+                Fill(new Rect(inner.x + u * 20, inner.y + u * 5, u * 5, u * 6), c);
+                Fill(new Rect(inner.x + u * 1, inner.y + u * 14, u * 8, u * 3), highlight);
+                break;
+            case ToolButtonKind.Keycard:
+                Fill(new Rect(inner.x + u * 3, inner.y + u * 4, inner.width - u * 6, inner.height - u * 8), new Color(0.13f, 0.22f, 0.24f, 1f));
+                Fill(new Rect(inner.x + u * 5, inner.y + u * 6, inner.width - u * 10, u * 4), c);
+                Fill(new Rect(inner.x + u * 5, inner.y + u * 13, inner.width - u * 12, u * 3), new Color(0.35f, 0.48f, 0.48f, 1f));
+                Fill(new Rect(inner.x + inner.width - u * 11, inner.y + inner.height - u * 13, u * 6, u * 6), highlight);
+                break;
+            case ToolButtonKind.Detective:
+                Fill(new Rect(inner.x + u * 8, inner.y + u * 1, u * 11, u * 7), highlight);
+                Fill(new Rect(inner.x + u * 7, inner.y + u * 7, u * 13, u * 8), ink);
+                Fill(new Rect(inner.x + u * 3, inner.y + u * 14, u * 18, u * 16), c);
+                Fill(new Rect(inner.x + u * 3, inner.y + u * 14, u * 7, u * 16), new Color(0.27f, 0.45f, 0.45f, 1f));
+                Fill(new Rect(inner.x + u * 17, inner.y + u * 13, u * 9, u * 5), highlight);
+                Fill(new Rect(inner.x + u * 20, inner.y + u * 17, u * 5, u * 12), ink);
+                Fill(new Rect(inner.x + u * 8, inner.y + u * 22, u * 14, u * 5), highlight);
                 break;
             case ToolButtonKind.Boot:
-                Fill(new Rect(inner.x + u * 5, inner.y + u * 1, u * 5, u * 12), c);
-                Fill(new Rect(inner.x + u * 2, inner.y + u * 11, u * 12, u * 4), c);
-                Fill(new Rect(inner.x, inner.y + u * 13, u * 9, u * 3), c);
-                break;
-            case ToolButtonKind.File:
-                Fill(new Rect(inner.x + u * 2, inner.y, inner.width - u * 3, inner.height), c);
-                Fill(new Rect(inner.x + inner.width - u * 5, inner.y, u * 5, u * 5), Color.black);
-                Fill(new Rect(inner.x + u * 5, inner.y + u * 7, inner.width - u * 10, u * 2), Color.black);
-                Fill(new Rect(inner.x + u * 5, inner.y + u * 12, inner.width - u * 12, u * 2), Color.black);
-                break;
-            case ToolButtonKind.Card:
-                Fill(new Rect(inner.x, inner.y + u * 3, inner.width, inner.height - u * 6), c);
-                Fill(new Rect(inner.x + u * 3, inner.y + u * 6, inner.width - u * 6, u * 3), Color.black);
-                Fill(new Rect(inner.x + inner.width - u * 6, inner.y + inner.height - u * 9, u * 4, u * 4), Color.black);
-                break;
-            case ToolButtonKind.Gear:
-                Fill(new Rect(inner.x + u * 5, inner.y + u * 2, u * 6, inner.height - u * 4), c);
-                Fill(new Rect(inner.x + u * 2, inner.y + u * 5, inner.width - u * 4, u * 6), c);
-                Fill(new Rect(inner.x + u * 7, inner.y + u * 7, u * 3, u * 3), Color.black);
+                Fill(new Rect(inner.x + u * 9, inner.y + u * 2, u * 8, u * 22), c);
+                Fill(new Rect(inner.x + u * 5, inner.y + u * 21, u * 20, u * 7), c);
+                Fill(new Rect(inner.x + u * 2, inner.y + u * 25, u * 14, u * 5), highlight);
+                Fill(new Rect(inner.x + u * 8, inner.y + u * 24, u * 15, u * 3), ink);
                 break;
         }
     }
@@ -275,11 +294,10 @@ public class DrifterActionToolbar : MonoBehaviour
 
     enum ToolButtonKind
     {
-        Hand,
-        Eye,
-        Boot,
-        File,
-        Card,
-        Gear
+        Question,
+        HandClue,
+        Keycard,
+        Detective,
+        Boot
     }
 }
