@@ -14,13 +14,13 @@ For quick reference work, the old HTML prototype can still be opened from `proto
 
 ## Current Playable Slice
 
-- Title screen with Start Game, Continue, Scene Select, Settings, and Reset Progress.
-- Three playable scenes: The Alley, The Blood Lab, and The Zoo.
-- Contextual canvas hotspots for investigation instead of a visible verb bar.
-- Case file and evidence collection.
-- Persistent progress with localStorage.
-- Scene completion, objective tracking, debug flag inspection, and reset.
-- Optional generated ambience/audio after the player starts it.
+- Unity + PowerQuest production slice exported to `docs/` for GitHub Pages.
+- Cinematic noir title overlay with rain, scanlines, a dark city background, and a minimal menu.
+- First playable Alley scene with Captain Gabardina, rain, severed-hand evidence, drain clue, and service-door objective.
+- Contextual interaction model: left click acts, right click inspects, compact dock selects inspect/move/action/case modes.
+- Compact hidden case-file strip instead of a permanent inventory bar.
+- Dark cinematic subtitle treatment replacing the default bright PowerQuest display box.
+- Animated rain and scanline presentation overlays for the menu and first scene.
 
 ## Scene Flow
 
@@ -47,3 +47,11 @@ The expected project-page URL is:
 - Treat the HTML game as the story, mood, and scene reference while PowerQuest becomes the production build.
 - Build the Alley vertical slice first, then split the Blood Lab / Lavatory and Zoo into proper PowerQuest rooms.
 - Replace the imported sample art with bespoke noir character, prop, and room sprites.
+
+## Noir UI Direction
+
+- Palette anchor: near-black, deep navy, wet asphalt, muted slate, cold cyan, sodium amber, and dried-blood red.
+- UI should stay minimal: title/menu overlays, compact bottom dock, hidden case file, and short subtitle blocks.
+- Keep default PowerQuest UI hidden unless it is restyled first.
+- Controls: left click performs the contextual action, right click inspects, the case button opens evidence, and move/look/action are selected from the compact dock.
+- The UI layer lives primarily in `Assets/Game/TheLastDrifter/DrifterActionToolbar.cs`; room narrative remains in the PowerQuest room scripts.

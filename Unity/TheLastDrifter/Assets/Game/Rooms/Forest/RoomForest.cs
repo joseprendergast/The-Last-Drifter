@@ -11,7 +11,7 @@ public class RoomForest : RoomScript<RoomForest>
     public void OnEnterRoom()
     {
         Globals.m_drifterProgress = eDrifterCaseProgress.EnteredAlley;
-        G.InventoryBar.Show();
+        G.InventoryBar.Hide();
         G.Toolbar.Hide();
     }
 

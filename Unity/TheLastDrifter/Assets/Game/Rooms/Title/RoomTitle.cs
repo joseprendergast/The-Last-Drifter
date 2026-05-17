@@ -39,7 +39,7 @@ public class RoomTitle : RoomScript<RoomTitle>
 	{
 		Globals.ResetDrifterCase();
 		Globals.m_drifterProgress = GlobalScript.eDrifterCaseProgress.EnteredAlley;
-		G.InventoryBar.Show();
+		G.InventoryBar.Hide();
 		G.Toolbar.Hide();
 		
 		E.ChangeRoomBG(R.Alley);
