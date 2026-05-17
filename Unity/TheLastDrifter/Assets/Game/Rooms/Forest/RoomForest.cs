@@ -6,11 +6,20 @@ using static GlobalScript;
 
 public class RoomForest : RoomScript<RoomForest>
 {
+    static readonly Vector2 PlayerStart = new Vector2(-140f, -324f);
+    static readonly Vector2 HandStart = new Vector2(115f, -332f);
     int m_rainLooks = 0;
 
     public void OnEnterRoom()
     {
+        bool openingWakeUp = FirstTimeVisited && EnteredFromEditor == false;
         Globals.m_drifterProgress = eDrifterCaseProgress.EnteredAlley;
+        DrifterActionToolbar.PrepareGameplay();
+        C.Gabardina.SetPosition(PlayerStart, eFace.Right);
+        C.Gabardina.Visible = !openingWakeUp;
+        C.Barney.Visible = false;
+        C.Barney.Clickable = false;
+        Prop("Bucket").Position = HandStart;
         G.InventoryBar.Hide();
         G.Toolbar.Hide();
     }
@@ -19,14 +28,20 @@ public class RoomForest : RoomScript<RoomForest>
     {
         if (FirstTimeVisited && EnteredFromEditor == false)
         {
-            yield return C.Display("The alley breathes rain and old electricity.");
-            yield return C.Gabardina.WalkTo(Point("EntryWalk"));
-            yield return C.Display("Captain Gabardina stops at the edge of the light.");
-            yield return E.WaitSkip();
-            yield return C.Display("The floor is wet. The coat is empty. The hand is not.");
+            E.StartCutscene();
+            DrifterActionToolbar.BeginWakeUp();
+            yield return E.Wait(1.25f);
+            C.Gabardina.Visible = true;
+            DrifterActionToolbar.EndWakeUp();
+            yield return E.Wait(0.18f);
+            E.EndCutscene();
+            DrifterActionToolbar.ShowToast("Rain over black water. A coat on the floor. One hand where a body should be.");
+        }
+        else
+        {
+            C.Gabardina.Visible = true;
         }
 
-        C.Gabardina.WalkToBG(Point("EntryWalk"));
         yield return E.Break;
     }
 
