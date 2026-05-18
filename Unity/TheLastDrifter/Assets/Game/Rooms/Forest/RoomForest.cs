@@ -20,6 +20,8 @@ public class RoomForest : RoomScript<RoomForest>
         C.Barney.Visible = false;
         C.Barney.Clickable = false;
         Prop("Bucket").Position = HandStart;
+        Prop("Bucket").Visible = Globals.m_sawSeveredHand == false;
+        Prop("Bucket").Clickable = Globals.m_sawSeveredHand == false;
         G.InventoryBar.Hide();
         G.Toolbar.Hide();
     }
@@ -85,13 +87,16 @@ public class RoomForest : RoomScript<RoomForest>
         {
             Globals.m_sawSeveredHand = true;
             Globals.m_drifterProgress = eDrifterCaseProgress.SawSeveredHand;
-            yield return C.Display("It is a left hand. Wedding mark. Clean cut. No blood trail leading away.");
+            prop.Visible = false;
+            prop.Clickable = false;
+            DrifterActionToolbar.ShowToast("Evidence added: severed hand");
+            yield return C.Display("Gabardina opens the paper fold with two fingers. Left hand. Wedding mark. Clean cut.");
             yield return E.WaitSkip();
-            yield return C.Display("Gabardina wraps it in evidence paper and tries not to think about the missing rest.");
+            yield return C.Display("No blood trail leading away. Somebody placed it here, then waited for him to wake.");
         }
         else
         {
-            yield return C.Display("The hand is bagged now, but the shape of it still sits in the rain.");
+            yield return C.Display("The hand is in the case file now. The empty spot on the floor feels louder.");
         }
 
         yield return E.Break;
@@ -133,15 +138,16 @@ public class RoomForest : RoomScript<RoomForest>
         yield return C.WalkToClicked();
         yield return C.FaceClicked();
 
-        if (Globals.m_sawSeveredHand && Globals.m_foundBloodLavatory)
+        if (Globals.m_sawSeveredHand)
         {
-            Globals.m_drifterProgress = eDrifterCaseProgress.UnlockedLavatory;
+            Globals.m_enteredBar = true;
+            Globals.m_drifterProgress = eDrifterCaseProgress.EnteredBar;
             E.StartCutscene();
-            yield return C.Display("The service door gives on the third shove.");
+            yield return C.Display("The service door gives on the third shove. Warm light leaks out under it.");
             yield return E.WaitSkip();
-            yield return C.Display("Below: fluorescent hum, wet tile, and the impossible smell of a hospital at sea.");
-            yield return E.WaitSkip();
-            yield return C.Display("Next build: Blood Lab / Lavatory room.");
+            yield return C.Display("Inside: a bar pretending the storm cannot get in.");
+            C.Gabardina.Visible = false;
+            DrifterActionToolbar.EnterBarInterior();
             E.EndCutscene();
         }
         else if (Globals.m_sawSeveredHand == false)

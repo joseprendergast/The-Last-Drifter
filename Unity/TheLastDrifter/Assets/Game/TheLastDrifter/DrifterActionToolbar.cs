@@ -24,6 +24,7 @@ public class DrifterActionToolbar : MonoBehaviour
     static DrifterActionToolbar s_instance;
     static ToolMode s_mode = ToolMode.Interact;
     static Rect s_toolbarRect;
+    static bool s_barInterior;
 
     GUIStyle m_labelStyle;
     GUIStyle m_menuStyle;
@@ -45,7 +46,7 @@ public class DrifterActionToolbar : MonoBehaviour
     };
 
     readonly string[] m_menuItems = { "NEW GAME", "CONTINUE", "LOAD GAME", "SETTINGS", "CREDITS" };
-    readonly string[] m_caseItems = { "SEVERED HAND", "RAINED COAT", "BLOOD DRAIN" };
+    readonly string[] m_caseItems = { "SEVERED HAND", "RAIN COAT", "BLOOD DRAIN", "BAR MATCHBOOK" };
 
     public static ToolMode Mode { get { return s_mode; } }
 
@@ -78,6 +79,7 @@ public class DrifterActionToolbar : MonoBehaviour
         Ensure();
         s_mode = ToolMode.Interact;
         s_toolbarRect = Rect.zero;
+        s_barInterior = false;
 
         if (s_instance != null)
             s_instance.m_inventoryOpen = false;
@@ -109,6 +111,26 @@ public class DrifterActionToolbar : MonoBehaviour
             s_instance.m_wakeUpActive = false;
     }
 
+    public static void EnterBarInterior()
+    {
+        Ensure();
+        s_barInterior = true;
+        s_mode = ToolMode.Interact;
+        if (s_instance != null)
+        {
+            s_instance.m_inventoryOpen = false;
+            ShowToast("Murphy's Lantern. Warm beer light. Bad answers.", 4.2f);
+        }
+    }
+
+    public static void ExitBarInterior()
+    {
+        s_barInterior = false;
+        if (C.Gabardina != null)
+            C.Gabardina.Visible = true;
+        ShowToast("Back into the rain.", 2.8f);
+    }
+
     void Awake()
     {
         s_instance = this;
@@ -130,6 +152,13 @@ public class DrifterActionToolbar : MonoBehaviour
         }
 
         float scale = UiScale();
+        if (s_barInterior)
+        {
+            DrawBarInterior(scale, Event.current);
+            DrawBarSceneUi(scale, Event.current);
+            return;
+        }
+
         DrawSceneLighting(scale);
         DrawSceneRain();
         if (m_wakeUpActive && Time.time < m_wakeUpUntil)
@@ -175,11 +204,12 @@ public class DrifterActionToolbar : MonoBehaviour
 
         float margin = Mathf.Round(Screen.width * 0.15f);
         float titleY = Mathf.Round(Screen.height * 0.22f);
-        float panelW = Mathf.Round(252f * scale);
-        float panelH = Mathf.Round(276f * scale);
+        float panelW = Mathf.Round(326f * scale);
+        float panelH = Mathf.Round(318f * scale);
         Rect menuPanel = new Rect(margin - Mathf.Round(20f * scale), titleY - Mathf.Round(20f * scale), panelW, panelH);
-        Fill(menuPanel, Hex(0x05, 0x07, 0x0A, 0.52f));
-        Stroke(menuPanel, Hex(0x42, 0x50, 0x61, 0.42f), Mathf.Max(1f, Mathf.Round(scale)));
+        Fill(menuPanel, Hex(0x05, 0x07, 0x0A, 0.70f));
+        Fill(new Rect(menuPanel.x + Mathf.Round(5f * scale), menuPanel.y + Mathf.Round(5f * scale), menuPanel.width, menuPanel.height), Hex(0x00, 0x00, 0x00, 0.28f));
+        Stroke(menuPanel, Hex(0x42, 0x50, 0x61, 0.48f), Mathf.Max(1f, Mathf.Round(scale)));
         Fill(new Rect(menuPanel.x, menuPanel.y, Mathf.Round(3f * scale), menuPanel.height), Hex(0xD2, 0x8A, 0x35, 0.78f));
 
         m_titleStyle.fontSize = Mathf.RoundToInt(22f * scale);
@@ -187,13 +217,14 @@ public class DrifterActionToolbar : MonoBehaviour
 
         m_labelStyle.fontSize = Mathf.RoundToInt(7f * scale);
         m_labelStyle.alignment = TextAnchor.MiddleLeft;
-        DrawTextShadow(new Rect(margin, titleY + Mathf.Round(40f * scale), Screen.width - margin * 2f, Mathf.Round(18f * scale)), "RAIN / BLACK WATER / ONE HAND LEFT BEHIND", m_labelStyle, Secondary, scale);
-        Fill(new Rect(margin, titleY + Mathf.Round(64f * scale), Mathf.Round(130f * scale), Mathf.Max(1f, Mathf.Round(scale))), Amber);
+        DrawTextShadow(new Rect(margin, titleY + Mathf.Round(42f * scale), Screen.width - margin * 2f, Mathf.Round(18f * scale)), "CHAPTER ONE / WAKE IN RAIN", m_labelStyle, Amber, scale);
+        DrawTextShadow(new Rect(margin, titleY + Mathf.Round(58f * scale), Screen.width - margin * 2f, Mathf.Round(18f * scale)), "A HAND ON THE FLOOR. A DOOR WITH LIGHT UNDER IT.", m_labelStyle, Secondary, scale);
+        Fill(new Rect(margin, titleY + Mathf.Round(80f * scale), Mathf.Round(142f * scale), Mathf.Max(1f, Mathf.Round(scale))), Amber);
         m_labelStyle.alignment = TextAnchor.MiddleCenter;
 
-        float itemY = titleY + Mathf.Round(90f * scale);
+        float itemY = titleY + Mathf.Round(106f * scale);
         float itemH = Mathf.Round(24f * scale);
-        float itemW = Mathf.Round(176f * scale);
+        float itemW = Mathf.Round(190f * scale);
         m_menuStyle.fontSize = Mathf.RoundToInt(10f * scale);
 
         for (int i = 0; i < m_menuItems.Length; i++)
@@ -201,8 +232,8 @@ public class DrifterActionToolbar : MonoBehaviour
             Rect r = new Rect(margin, itemY + i * Mathf.Round(31f * scale), itemW, itemH);
             bool over = r.Contains(mouse);
             Color c = over || i == 0 ? Amber : OffWhite;
-            if (i > 1)
-                c = over ? Secondary : Hex(0x5A, 0x5F, 0x66, 1f);
+            if (i > 1 && over == false)
+                c = Secondary;
 
             if (over)
             {
@@ -212,7 +243,7 @@ public class DrifterActionToolbar : MonoBehaviour
 
             DrawTextShadow(r, m_menuItems[i], m_menuStyle, c, scale);
 
-            if (over && evt.type == EventType.MouseDown && evt.button == 0)
+            if (over && PrimaryClick(evt))
             {
                 ActivateMenuItem(i);
                 evt.Use();
@@ -221,7 +252,7 @@ public class DrifterActionToolbar : MonoBehaviour
 
         m_labelStyle.fontSize = Mathf.RoundToInt(7f * scale);
         m_labelStyle.alignment = TextAnchor.MiddleLeft;
-        DrawTextShadow(new Rect(margin, Screen.height - Mathf.Round(44f * scale), Screen.width - margin * 2f, Mathf.Round(18f * scale)), "Click or press A to enter the alley. Right click inspects. TAB reveals hotspots.", m_labelStyle, Secondary, scale);
+        DrawTextShadow(new Rect(margin, Screen.height - Mathf.Round(44f * scale), Screen.width - margin * 2f, Mathf.Round(18f * scale)), "Start the case. Right click inspects. Case file opens from the dock.", m_labelStyle, Secondary, scale);
         m_labelStyle.alignment = TextAnchor.MiddleCenter;
     }
 
@@ -246,13 +277,19 @@ public class DrifterActionToolbar : MonoBehaviour
             return;
         }
 
+        if (index == 2)
+        {
+            GuiSave.Script.ShowRestore();
+            return;
+        }
+
         if (index == 3)
         {
             G.Options.Show();
             return;
         }
 
-        m_status = index == 2 ? "No save selected." : "Credits are still in the case file.";
+        m_status = "Credits are still in the case file.";
     }
 
     void DrawNoirTitleBackground(float scale)
@@ -304,6 +341,7 @@ public class DrifterActionToolbar : MonoBehaviour
         Vector2 mouse = evt.mousePosition;
 
         m_hover = string.Empty;
+        DrawAlleyDoorShortcut(scale, mouse, evt);
         string text = GetDisplayText();
         if (!string.IsNullOrEmpty(text) && (!PowerQuest.Get.GetBlocked() || !string.IsNullOrEmpty(m_hover)))
             DrawSceneLabel(text, scale);
@@ -313,6 +351,180 @@ public class DrifterActionToolbar : MonoBehaviour
             DrawCaseStrip(scale, mouse, evt);
 
         DrawScanlineOverlay(scale, 0.06f);
+    }
+
+    void DrawBarSceneUi(float scale, Event evt)
+    {
+        Vector2 mouse = evt.mousePosition;
+        string text = GetDisplayText();
+        if (!string.IsNullOrEmpty(text))
+            DrawSceneLabel(text, scale);
+
+        DrawCompactDock(scale, mouse, evt);
+        if (m_inventoryOpen)
+            DrawCaseStrip(scale, mouse, evt);
+
+        DrawScanlineOverlay(scale, 0.05f);
+    }
+
+    void DrawAlleyDoorShortcut(float scale, Vector2 mouse, Event evt)
+    {
+        Room room = PowerQuest.Get == null ? null : PowerQuest.Get.GetCurrentRoom();
+        if (room == null || room.ScriptName != "Forest" || PowerQuest.Get.GetBlocked())
+            return;
+
+        Rect door = new Rect(Screen.width * 0.74f, Screen.height * 0.40f, Screen.width * 0.18f, Screen.height * 0.25f);
+        bool over = door.Contains(mouse);
+        if (over == false)
+            return;
+
+        m_hover = GlobalScript.Script != null && GlobalScript.Script.m_sawSeveredHand ? "Enter bar" : "Locked service door";
+        Stroke(door, Hex(0xD2, 0x8A, 0x35, 0.32f), Mathf.Max(1f, Mathf.Round(scale)));
+
+        if (PrimaryClick(evt) == false)
+            return;
+
+        if (GlobalScript.Script == null || GlobalScript.Script.m_sawSeveredHand == false)
+        {
+            ShowToast("The door can wait. The hand cannot.", 3.4f);
+            evt.Use();
+            return;
+        }
+
+        GlobalScript.Script.m_enteredBar = true;
+        GlobalScript.Script.m_drifterProgress = GlobalScript.eDrifterCaseProgress.EnteredBar;
+        C.Gabardina.Visible = false;
+        EnterBarInterior();
+        evt.Use();
+    }
+
+    void DrawBarInterior(float scale, Event evt)
+    {
+        Vector2 mouse = evt.mousePosition;
+        m_hover = string.Empty;
+        m_titleStyle.fontSize = Mathf.RoundToInt(18f * scale);
+        m_titleStyle.alignment = TextAnchor.MiddleLeft;
+
+        Fill(new Rect(0, 0, Screen.width, Screen.height), AlmostBlack);
+        Fill(new Rect(0, 0, Screen.width, Screen.height * 0.58f), Hex(0x10, 0x13, 0x18, 1f));
+        Fill(new Rect(0, Screen.height * 0.58f, Screen.width, Screen.height * 0.42f), Hex(0x13, 0x0F, 0x10, 1f));
+
+        for (int i = 0; i < 9; i++)
+        {
+            float y = Screen.height * 0.61f + i * Mathf.Round(13f * scale);
+            Fill(new Rect(0, y, Screen.width, Mathf.Max(1f, scale)), Hex(0xD2, 0x8A, 0x35, i % 2 == 0 ? 0.08f : 0.04f));
+        }
+
+        DrawBarCounter(scale);
+        DrawPoolTable(scale);
+        DrawDartBoard(scale);
+        DrawPatrons(scale);
+        DrawJukebox(scale);
+        DrawDetectiveInBar(scale);
+
+        DrawBarHotspot(new Rect(Screen.width * 0.53f, Screen.height * 0.34f, Screen.width * 0.26f, Screen.height * 0.24f), "Talk to bartender", "The bartender wipes the same glass twice. \"He came in dry,\" she says. \"That was the part I noticed.\"", evt, mouse, scale, () => GlobalScript.Script.m_talkedToBartender = true);
+        DrawBarHotspot(new Rect(Screen.width * 0.13f, Screen.height * 0.58f, Screen.width * 0.32f, Screen.height * 0.20f), "Check pool table", "The eight ball is wet. Someone carried the storm in on their hands.", evt, mouse, scale, () => GlobalScript.Script.m_checkedPoolTable = true);
+        DrawBarHotspot(new Rect(Screen.width * 0.78f, Screen.height * 0.29f, Screen.width * 0.10f, Screen.height * 0.18f), "Inspect darts", "Three darts land around a photo pinned to cork. None touch the face.", evt, mouse, scale, () => GlobalScript.Script.m_checkedDarts = true);
+        DrawBarHotspot(new Rect(Screen.width * 0.34f, Screen.height * 0.38f, Screen.width * 0.13f, Screen.height * 0.26f), "Talk to booth", "The booth goes quiet when Gabardina looks over. One man watches the case file, not the detective.", evt, mouse, scale);
+        DrawBarHotspot(new Rect(Screen.width * 0.05f, Screen.height * 0.31f, Screen.width * 0.12f, Screen.height * 0.33f), "Back to alley", "The rain is still waiting outside.", evt, mouse, scale, ExitBarInterior);
+
+        DrawTextShadow(new Rect(Screen.width * 0.08f, Screen.height * 0.16f, Screen.width * 0.54f, Mathf.Round(24f * scale)), "MURPHY'S LANTERN", m_titleStyle, OffWhite, scale);
+        Fill(new Rect(Screen.width * 0.08f, Screen.height * 0.21f, Screen.width * 0.22f, Mathf.Max(1f, Mathf.Round(scale))), Amber);
+        DrawVignette(scale, 0.38f);
+    }
+
+    void DrawBarCounter(float scale)
+    {
+        Fill(new Rect(Screen.width * 0.50f, Screen.height * 0.42f, Screen.width * 0.42f, Screen.height * 0.12f), Hex(0x26, 0x18, 0x12, 1f));
+        Fill(new Rect(Screen.width * 0.50f, Screen.height * 0.40f, Screen.width * 0.42f, Mathf.Round(8f * scale)), Hex(0xD2, 0x8A, 0x35, 0.55f));
+        Fill(new Rect(Screen.width * 0.55f, Screen.height * 0.22f, Screen.width * 0.31f, Screen.height * 0.18f), Hex(0x0B, 0x0E, 0x12, 0.94f));
+        for (int i = 0; i < 8; i++)
+        {
+            float x = Screen.width * (0.57f + i * 0.035f);
+            Fill(new Rect(x, Screen.height * 0.27f, Mathf.Round(7f * scale), Mathf.Round(24f * scale)), i % 2 == 0 ? Hex(0x3F, 0xA6, 0xA1, 0.45f) : Hex(0xD2, 0x8A, 0x35, 0.42f));
+        }
+    }
+
+    void DrawPoolTable(float scale)
+    {
+        Rect table = new Rect(Screen.width * 0.14f, Screen.height * 0.61f, Screen.width * 0.28f, Screen.height * 0.13f);
+        Fill(new Rect(table.x + Mathf.Round(6f * scale), table.y + Mathf.Round(7f * scale), table.width, table.height), Hex(0x00, 0x00, 0x00, 0.34f));
+        Fill(table, Hex(0x10, 0x3E, 0x36, 1f));
+        Stroke(table, Hex(0xD2, 0x8A, 0x35, 0.42f), Mathf.Round(3f * scale));
+        Fill(new Rect(table.x + table.width * 0.42f, table.y + table.height * 0.36f, Mathf.Round(5f * scale), Mathf.Round(5f * scale)), OffWhite);
+        Fill(new Rect(table.x + table.width * 0.58f, table.y + table.height * 0.52f, Mathf.Round(5f * scale), Mathf.Round(5f * scale)), Blood);
+    }
+
+    void DrawDartBoard(float scale)
+    {
+        float cx = Screen.width * 0.83f;
+        float cy = Screen.height * 0.34f;
+        Fill(new Rect(cx - 18f * scale, cy - 18f * scale, 36f * scale, 36f * scale), Hex(0x11, 0x18, 0x20, 1f));
+        Fill(new Rect(cx - 12f * scale, cy - 12f * scale, 24f * scale, 24f * scale), Hex(0xD2, 0x8A, 0x35, 0.45f));
+        Fill(new Rect(cx - 4f * scale, cy - 4f * scale, 8f * scale, 8f * scale), Blood);
+    }
+
+    void DrawPatrons(float scale)
+    {
+        DrawPerson(Screen.width * 0.63f, Screen.height * 0.32f, scale, Hex(0x1B, 0x14, 0x24, 1f), Hex(0xE2, 0xD8, 0xC4, 0.82f));
+        DrawPerson(Screen.width * 0.38f, Screen.height * 0.50f, scale, Hex(0x10, 0x18, 0x26, 1f), Hex(0xC4, 0x5A, 0x28, 0.78f));
+        DrawPerson(Screen.width * 0.43f, Screen.height * 0.51f, scale, Hex(0x26, 0x2A, 0x31, 1f), Hex(0xD2, 0x8A, 0x35, 0.72f));
+    }
+
+    void DrawDetectiveInBar(float scale)
+    {
+        float u = Mathf.Max(2f, Mathf.Round(3f * scale));
+        float x = Screen.width * 0.25f;
+        float y = Screen.height * 0.57f;
+        Color coat = Hex(0x18, 0x20, 0x2D, 1f);
+        Color hair = Hex(0x1B, 0x14, 0x24, 1f);
+        Color skin = Hex(0xC4, 0x5A, 0x28, 0.82f);
+
+        Fill(new Rect(x - u * 8f, y + u * 17f, u * 18f, u * 3f), Hex(0x00, 0x00, 0x00, 0.36f));
+        Fill(new Rect(x - u * 3f, y - u * 9f, u * 7f, u * 6f), skin);
+        Fill(new Rect(x - u * 5f, y - u * 10f, u * 6f, u * 9f), hair);
+        Fill(new Rect(x + u * 2f, y - u * 7f, u * 4f, u * 7f), hair);
+        Fill(new Rect(x - u * 5f, y - u * 2f, u * 11f, u * 19f), coat);
+        Fill(new Rect(x - u * 2f, y + u, u * 5f, u * 12f), Hex(0xE2, 0xD8, 0xC4, 0.42f));
+        Fill(new Rect(x - u * 8f, y + u, u * 4f, u * 12f), coat);
+        Fill(new Rect(x + u * 5f, y + u * 1f, u * 3f, u * 13f), coat);
+        Fill(new Rect(x - u * 5f, y + u * 17f, u * 4f, u * 9f), Hex(0x10, 0x18, 0x26, 1f));
+        Fill(new Rect(x + u * 2f, y + u * 17f, u * 4f, u * 9f), Hex(0x10, 0x18, 0x26, 1f));
+        Fill(new Rect(x - u * 5f, y + u * 25f, u * 7f, u * 2f), Amber);
+    }
+
+    void DrawPerson(float x, float y, float scale, Color coat, Color face)
+    {
+        float u = Mathf.Max(2f, Mathf.Round(3f * scale));
+        Fill(new Rect(x - u * 2f, y - u * 6f, u * 4f, u * 4f), face);
+        Fill(new Rect(x - u * 3f, y - u * 2f, u * 6f, u * 13f), coat);
+        Fill(new Rect(x - u * 5f, y + u, u * 2f, u * 8f), coat);
+        Fill(new Rect(x + u * 3f, y + u, u * 2f, u * 8f), coat);
+    }
+
+    void DrawJukebox(float scale)
+    {
+        Rect box = new Rect(Screen.width * 0.06f, Screen.height * 0.38f, Screen.width * 0.08f, Screen.height * 0.22f);
+        Fill(box, Hex(0x1B, 0x14, 0x24, 1f));
+        Stroke(box, Hex(0x8F, 0xC9, 0xD6, 0.36f), Mathf.Round(2f * scale));
+        Fill(new Rect(box.x + box.width * 0.20f, box.y + box.height * 0.18f, box.width * 0.60f, Mathf.Round(5f * scale)), Amber);
+        Fill(new Rect(box.x + box.width * 0.28f, box.y + box.height * 0.44f, box.width * 0.44f, Mathf.Round(4f * scale)), Cyan);
+    }
+
+    void DrawBarHotspot(Rect r, string label, string response, Event evt, Vector2 mouse, float scale, System.Action action = null)
+    {
+        bool over = r.Contains(mouse);
+        if (over)
+        {
+            m_hover = label;
+            Stroke(r, Hex(0xD2, 0x8A, 0x35, 0.38f), Mathf.Max(1f, Mathf.Round(scale)));
+            if (PrimaryClick(evt))
+            {
+                action?.Invoke();
+                ShowToast(response, 4.2f);
+                evt.Use();
+            }
+        }
     }
 
     void DrawCompactDock(float scale, Vector2 mouse, Event evt)
@@ -337,7 +549,7 @@ public class DrifterActionToolbar : MonoBehaviour
 
     void DrawCaseStrip(float scale, Vector2 mouse, Event evt)
     {
-        float w = Mathf.Round(290f * scale);
+        float w = Mathf.Round(Mathf.Min(Screen.width * 0.78f, 390f * scale));
         float h = Mathf.Round(44f * scale);
         Rect strip = new Rect(Mathf.Round((Screen.width - w) * 0.5f), Screen.height - Mathf.Round(108f * scale), w, h);
         Fill(strip, Panel);
@@ -349,15 +561,50 @@ public class DrifterActionToolbar : MonoBehaviour
 
         for (int i = 0; i < m_caseItems.Length; i++)
         {
-            Rect item = new Rect(strip.x + Mathf.Round(12f * scale) + i * Mathf.Round(88f * scale), strip.y + Mathf.Round(20f * scale), Mathf.Round(78f * scale), Mathf.Round(16f * scale));
+            bool available = CaseItemAvailable(i);
+            Rect item = new Rect(strip.x + Mathf.Round(12f * scale) + i * Mathf.Round(90f * scale), strip.y + Mathf.Round(20f * scale), Mathf.Round(84f * scale), Mathf.Round(16f * scale));
             bool over = item.Contains(mouse);
             if (over)
                 Fill(item, Hex(0xD2, 0x8A, 0x35, 0.16f));
-            DrawTextShadow(item, m_caseItems[i], m_labelStyle, over ? OffWhite : Secondary, scale);
+            DrawTextShadow(item, m_caseItems[i], m_labelStyle, available ? (over ? OffWhite : Secondary) : Hex(0x5A, 0x5F, 0x66, 1f), scale);
+
+            if (over && PrimaryClick(evt))
+            {
+                ShowToast(CaseItemLine(i), 3.8f);
+                evt.Use();
+            }
         }
 
         m_labelStyle.alignment = TextAnchor.MiddleCenter;
         s_toolbarRect = Rect.MinMaxRect(Mathf.Min(s_toolbarRect.xMin, strip.xMin), Mathf.Min(s_toolbarRect.yMin, strip.yMin), Mathf.Max(s_toolbarRect.xMax, strip.xMax), Mathf.Max(s_toolbarRect.yMax, strip.yMax));
+    }
+
+    bool CaseItemAvailable(int index)
+    {
+        if (GlobalScript.Script == null)
+            return false;
+
+        if (index == 0)
+            return GlobalScript.Script.m_sawSeveredHand;
+        if (index == 1)
+            return GlobalScript.Script.m_checkedRain;
+        if (index == 2)
+            return GlobalScript.Script.m_foundBloodLavatory;
+
+        return GlobalScript.Script.m_enteredBar;
+    }
+
+    string CaseItemLine(int index)
+    {
+        if (!CaseItemAvailable(index))
+            return "No entry yet.";
+        if (index == 0)
+            return "Severed hand: clean cut, wedding mark, no trail.";
+        if (index == 1)
+            return "Rain coat: empty, soaked through, still warm at the collar.";
+        if (index == 2)
+            return "Blood drain: red water below street level.";
+        return "Bar matchbook: Murphy's Lantern. Someone wanted him indoors.";
     }
 
     void DrawButton(Rect rect, ToolButton button, float scale, Vector2 mouse, Event evt)
@@ -377,7 +624,7 @@ public class DrifterActionToolbar : MonoBehaviour
         if (over)
         {
             m_hover = button.Label;
-            if (evt.type == EventType.MouseDown && evt.button == 0)
+            if (PrimaryClick(evt))
             {
                 Activate(button);
                 evt.Use();
@@ -415,6 +662,9 @@ public class DrifterActionToolbar : MonoBehaviour
 
     string GetDisplayText()
     {
+        if (Time.time < m_toastUntil)
+            return m_toast;
+
         if (!string.IsNullOrEmpty(m_hover))
             return m_hover;
 
@@ -422,7 +672,7 @@ public class DrifterActionToolbar : MonoBehaviour
         if (!string.IsNullOrEmpty(sceneHover))
             return sceneHover;
 
-        return Time.time < m_toastUntil ? m_toast : string.Empty;
+        return string.Empty;
     }
 
     string GetSceneHoverText()
@@ -591,6 +841,11 @@ public class DrifterActionToolbar : MonoBehaviour
         GUI.color = color;
         GUI.DrawTexture(rect, Texture2D.whiteTexture);
         GUI.color = old;
+    }
+
+    bool PrimaryClick(Event evt)
+    {
+        return ((evt.type == EventType.MouseDown || evt.type == EventType.MouseUp) && evt.button == 0) || Input.GetMouseButtonDown(0);
     }
 
     float UiScale()

@@ -7,6 +7,7 @@ public partial class GlobalScript
         SawSeveredHand,
         FoundBloodDrain,
         UnlockedLavatory,
+        EnteredBar,
         ReachedMorningZoo
     }
 
@@ -15,6 +16,10 @@ public partial class GlobalScript
     public bool m_checkedRain = false;
     public bool m_checkedDrain = false;
     public bool m_foundBloodLavatory = false;
+    [System.NonSerialized] public bool m_enteredBar = false;
+    [System.NonSerialized] public bool m_talkedToBartender = false;
+    [System.NonSerialized] public bool m_checkedDarts = false;
+    [System.NonSerialized] public bool m_checkedPoolTable = false;
 
     public void ResetDrifterCase()
     {
@@ -23,5 +28,9 @@ public partial class GlobalScript
         m_checkedRain = false;
         m_checkedDrain = false;
         m_foundBloodLavatory = false;
+        m_enteredBar = false;
+        m_talkedToBartender = false;
+        m_checkedDarts = false;
+        m_checkedPoolTable = false;
     }
 }
