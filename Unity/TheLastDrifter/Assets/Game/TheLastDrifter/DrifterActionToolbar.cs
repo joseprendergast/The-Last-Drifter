@@ -406,31 +406,147 @@ public class DrifterActionToolbar : MonoBehaviour
         m_titleStyle.alignment = TextAnchor.MiddleLeft;
 
         Fill(new Rect(0, 0, Screen.width, Screen.height), AlmostBlack);
-        Fill(new Rect(0, 0, Screen.width, Screen.height * 0.58f), Hex(0x10, 0x13, 0x18, 1f));
-        Fill(new Rect(0, Screen.height * 0.58f, Screen.width, Screen.height * 0.42f), Hex(0x13, 0x0F, 0x10, 1f));
+        DrawBarBackWall(scale);
+        DrawBarCeiling(scale);
+        DrawPerspectiveFloor(scale);
+        DrawLeftBooths(scale);
+        DrawLongBarCounter(scale);
+        DrawForegroundTables(scale);
+        DrawBarCrowd(scale);
+        DrawDetectiveInBar(scale);
+        DrawAtmosphereHaze(scale);
 
-        for (int i = 0; i < 9; i++)
+        DrawBarHotspot(new Rect(Screen.width * 0.55f, Screen.height * 0.28f, Screen.width * 0.31f, Screen.height * 0.29f), "Talk to bartender", "The bartender wipes the same glass twice. \"He came in dry,\" she says. \"That was the part I noticed.\"", evt, mouse, scale, () => GlobalScript.Script.m_talkedToBartender = true);
+        DrawBarHotspot(new Rect(Screen.width * 0.47f, Screen.height * 0.58f, Screen.width * 0.30f, Screen.height * 0.20f), "Check pool table", "The eight ball is wet. Someone carried the storm in on their hands.", evt, mouse, scale, () => GlobalScript.Script.m_checkedPoolTable = true);
+        DrawBarHotspot(new Rect(Screen.width * 0.80f, Screen.height * 0.22f, Screen.width * 0.12f, Screen.height * 0.18f), "Inspect darts", "Three darts circle a photo pinned to cork. None touch the face.", evt, mouse, scale, () => GlobalScript.Script.m_checkedDarts = true);
+        DrawBarHotspot(new Rect(Screen.width * 0.12f, Screen.height * 0.34f, Screen.width * 0.28f, Screen.height * 0.33f), "Talk to booths", "The booths go quiet by sections. One man watches the case file, not the detective.", evt, mouse, scale);
+        DrawBarHotspot(new Rect(Screen.width * 0.02f, Screen.height * 0.39f, Screen.width * 0.10f, Screen.height * 0.33f), "Back to alley", "The rain is still waiting outside.", evt, mouse, scale, ExitBarInterior);
+
+        DrawTextShadow(new Rect(Screen.width * 0.07f, Screen.height * 0.12f, Screen.width * 0.54f, Mathf.Round(24f * scale)), "MURPHY'S LANTERN", m_titleStyle, OffWhite, scale);
+        Fill(new Rect(Screen.width * 0.07f, Screen.height * 0.17f, Screen.width * 0.19f, Mathf.Max(1f, Mathf.Round(scale))), Amber);
+        DrawVignette(scale, 0.46f);
+    }
+
+    void DrawBarBackWall(float scale)
+    {
+        Fill(new Rect(0, 0, Screen.width, Screen.height * 0.64f), Hex(0x0E, 0x13, 0x19, 1f));
+        Fill(new Rect(Screen.width * 0.23f, Screen.height * 0.18f, Screen.width * 0.52f, Screen.height * 0.28f), Hex(0x10, 0x18, 0x26, 0.92f));
+        Stroke(new Rect(Screen.width * 0.23f, Screen.height * 0.18f, Screen.width * 0.52f, Screen.height * 0.28f), Hex(0x42, 0x50, 0x61, 0.28f), Mathf.Max(1f, scale));
+
+        for (int i = 0; i < 11; i++)
         {
-            float y = Screen.height * 0.61f + i * Mathf.Round(13f * scale);
-            Fill(new Rect(0, y, Screen.width, Mathf.Max(1f, scale)), Hex(0xD2, 0x8A, 0x35, i % 2 == 0 ? 0.08f : 0.04f));
+            float x = Screen.width * (0.27f + i * 0.043f);
+            float h = Mathf.Round((18f + (i % 3) * 7f) * scale);
+            Fill(new Rect(x, Screen.height * 0.25f, Mathf.Round(5f * scale), h), i % 2 == 0 ? Hex(0x3F, 0xA6, 0xA1, 0.42f) : Hex(0xD2, 0x8A, 0x35, 0.48f));
+            Fill(new Rect(x - Mathf.Round(2f * scale), Screen.height * 0.24f + h, Mathf.Round(9f * scale), Mathf.Max(1f, scale)), Hex(0xE2, 0xD8, 0xC4, 0.18f));
         }
 
-        DrawBarCounter(scale);
-        DrawPoolTable(scale);
-        DrawDartBoard(scale);
-        DrawPatrons(scale);
-        DrawJukebox(scale);
-        DrawDetectiveInBar(scale);
+        Rect dart = new Rect(Screen.width * 0.83f, Screen.height * 0.23f, Screen.width * 0.07f, Screen.height * 0.11f);
+        Fill(dart, Hex(0x1B, 0x14, 0x24, 1f));
+        Stroke(dart, Hex(0x42, 0x50, 0x61, 0.58f), Mathf.Max(1f, scale));
+        Fill(new Rect(dart.center.x - 10f * scale, dart.center.y - 10f * scale, 20f * scale, 20f * scale), Hex(0xD2, 0x8A, 0x35, 0.48f));
+        Fill(new Rect(dart.center.x - 4f * scale, dart.center.y - 4f * scale, 8f * scale, 8f * scale), Blood);
 
-        DrawBarHotspot(new Rect(Screen.width * 0.53f, Screen.height * 0.34f, Screen.width * 0.26f, Screen.height * 0.24f), "Talk to bartender", "The bartender wipes the same glass twice. \"He came in dry,\" she says. \"That was the part I noticed.\"", evt, mouse, scale, () => GlobalScript.Script.m_talkedToBartender = true);
-        DrawBarHotspot(new Rect(Screen.width * 0.13f, Screen.height * 0.58f, Screen.width * 0.32f, Screen.height * 0.20f), "Check pool table", "The eight ball is wet. Someone carried the storm in on their hands.", evt, mouse, scale, () => GlobalScript.Script.m_checkedPoolTable = true);
-        DrawBarHotspot(new Rect(Screen.width * 0.78f, Screen.height * 0.29f, Screen.width * 0.10f, Screen.height * 0.18f), "Inspect darts", "Three darts land around a photo pinned to cork. None touch the face.", evt, mouse, scale, () => GlobalScript.Script.m_checkedDarts = true);
-        DrawBarHotspot(new Rect(Screen.width * 0.34f, Screen.height * 0.38f, Screen.width * 0.13f, Screen.height * 0.26f), "Talk to booth", "The booth goes quiet when Gabardina looks over. One man watches the case file, not the detective.", evt, mouse, scale);
-        DrawBarHotspot(new Rect(Screen.width * 0.05f, Screen.height * 0.31f, Screen.width * 0.12f, Screen.height * 0.33f), "Back to alley", "The rain is still waiting outside.", evt, mouse, scale, ExitBarInterior);
+        DrawHangingLamp(Screen.width * 0.34f, Screen.height * 0.19f, scale, 0.85f);
+        DrawHangingLamp(Screen.width * 0.58f, Screen.height * 0.16f, scale, 0.62f);
+        DrawHangingLamp(Screen.width * 0.76f, Screen.height * 0.20f, scale, 0.72f);
+    }
 
-        DrawTextShadow(new Rect(Screen.width * 0.08f, Screen.height * 0.16f, Screen.width * 0.54f, Mathf.Round(24f * scale)), "MURPHY'S LANTERN", m_titleStyle, OffWhite, scale);
-        Fill(new Rect(Screen.width * 0.08f, Screen.height * 0.21f, Screen.width * 0.22f, Mathf.Max(1f, Mathf.Round(scale))), Amber);
-        DrawVignette(scale, 0.38f);
+    void DrawBarCeiling(float scale)
+    {
+        FillTrapezoid(Screen.width * 0.12f, Screen.width * 0.88f, Screen.width * 0.28f, Screen.width * 0.72f, 0, Screen.height * 0.20f, Hex(0x08, 0x0B, 0x10, 0.96f));
+        for (int i = 0; i < 7; i++)
+        {
+            float x = Screen.width * (0.18f + i * 0.10f);
+            FillTrapezoid(x - 18f * scale, x + 18f * scale, Screen.width * 0.49f - 2f * i * scale, Screen.width * 0.51f + 2f * i * scale, 0, Screen.height * 0.42f, Hex(0x42, 0x50, 0x61, 0.10f));
+        }
+    }
+
+    void DrawPerspectiveFloor(float scale)
+    {
+        float horizon = Screen.height * 0.43f;
+        Fill(new Rect(0, horizon, Screen.width, Screen.height - horizon), Hex(0x12, 0x0E, 0x10, 1f));
+        FillTrapezoid(Screen.width * 0.27f, Screen.width * 0.73f, Screen.width * 0.02f, Screen.width * 0.98f, horizon, Screen.height * 0.86f, Hex(0x18, 0x13, 0x14, 1f));
+        FillTrapezoid(Screen.width * 0.37f, Screen.width * 0.63f, Screen.width * 0.24f, Screen.width * 0.76f, horizon, Screen.height * 0.82f, Hex(0x26, 0x2A, 0x31, 0.52f));
+
+        for (int i = 0; i < 16; i++)
+        {
+            float t = i / 15f;
+            float y = Mathf.Lerp(horizon + 4f * scale, Screen.height * 0.86f, t * t);
+            Fill(new Rect(Screen.width * 0.04f, y, Screen.width * 0.92f, Mathf.Max(1f, scale)), Hex(0xD2, 0x8A, 0x35, 0.06f + t * 0.05f));
+        }
+
+        for (int i = -5; i <= 5; i++)
+        {
+            float start = Screen.width * 0.50f + i * 12f * scale;
+            FillTrapezoid(start - scale, start + scale, Screen.width * (0.50f + i * 0.09f) - scale, Screen.width * (0.50f + i * 0.09f) + scale, horizon, Screen.height * 0.86f, Hex(0x00, 0x00, 0x00, 0.18f));
+        }
+    }
+
+    void DrawLeftBooths(float scale)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            float depth = i / 3f;
+            float y = Mathf.Lerp(Screen.height * 0.33f, Screen.height * 0.62f, depth);
+            float x = Mathf.Lerp(Screen.width * 0.24f, Screen.width * 0.08f, depth);
+            float w = Mathf.Lerp(Screen.width * 0.16f, Screen.width * 0.25f, depth);
+            float h = Mathf.Lerp(Screen.height * 0.08f, Screen.height * 0.13f, depth);
+            Rect booth = new Rect(x, y, w, h);
+            Fill(booth, Hex(0x1B, 0x14, 0x24, 0.98f));
+            Fill(new Rect(booth.x, booth.y, booth.width, Mathf.Round(5f * scale)), Hex(0xD2, 0x8A, 0x35, 0.38f));
+            Fill(new Rect(booth.x + booth.width * 0.10f, booth.y + booth.height * 0.42f, booth.width * 0.72f, Mathf.Round(4f * scale)), Hex(0x8F, 0xC9, 0xD6, 0.35f));
+            Stroke(booth, Hex(0x42, 0x50, 0x61, 0.34f), Mathf.Max(1f, scale));
+        }
+    }
+
+    void DrawLongBarCounter(float scale)
+    {
+        FillTrapezoid(Screen.width * 0.55f, Screen.width * 0.93f, Screen.width * 0.48f, Screen.width * 0.98f, Screen.height * 0.39f, Screen.height * 0.62f, Hex(0x26, 0x18, 0x12, 1f));
+        FillTrapezoid(Screen.width * 0.54f, Screen.width * 0.94f, Screen.width * 0.46f, Screen.width * 0.98f, Screen.height * 0.38f, Screen.height * 0.42f, Hex(0xD2, 0x8A, 0x35, 0.62f));
+        FillTrapezoid(Screen.width * 0.58f, Screen.width * 0.90f, Screen.width * 0.52f, Screen.width * 0.95f, Screen.height * 0.56f, Screen.height * 0.66f, Hex(0x00, 0x00, 0x00, 0.28f));
+        DrawPerspectivePerson(Screen.width * 0.65f, Screen.height * 0.38f, 0.76f, scale, Hex(0x1B, 0x14, 0x24, 1f), Hex(0xE2, 0xD8, 0xC4, 0.82f), true);
+        DrawPerspectivePerson(Screen.width * 0.79f, Screen.height * 0.42f, 0.62f, scale, Hex(0x10, 0x18, 0x26, 1f), Hex(0xC4, 0x5A, 0x28, 0.74f), false);
+    }
+
+    void DrawForegroundTables(float scale)
+    {
+        FillTrapezoid(Screen.width * 0.46f, Screen.width * 0.68f, Screen.width * 0.40f, Screen.width * 0.78f, Screen.height * 0.61f, Screen.height * 0.76f, Hex(0x0F, 0x3E, 0x36, 1f));
+        Stroke(new Rect(Screen.width * 0.42f, Screen.height * 0.61f, Screen.width * 0.34f, Screen.height * 0.15f), Hex(0xD2, 0x8A, 0x35, 0.34f), Mathf.Max(1f, scale));
+        Fill(new Rect(Screen.width * 0.54f, Screen.height * 0.67f, Mathf.Round(5f * scale), Mathf.Round(5f * scale)), OffWhite);
+        Fill(new Rect(Screen.width * 0.61f, Screen.height * 0.70f, Mathf.Round(6f * scale), Mathf.Round(6f * scale)), Blood);
+
+        FillTrapezoid(Screen.width * 0.10f, Screen.width * 0.29f, Screen.width * 0.04f, Screen.width * 0.35f, Screen.height * 0.68f, Screen.height * 0.79f, Hex(0x11, 0x18, 0x20, 1f));
+        Stroke(new Rect(Screen.width * 0.06f, Screen.height * 0.68f, Screen.width * 0.28f, Screen.height * 0.11f), Hex(0x42, 0x50, 0x61, 0.34f), Mathf.Max(1f, scale));
+    }
+
+    void DrawBarCrowd(float scale)
+    {
+        DrawPerspectivePerson(Screen.width * 0.18f, Screen.height * 0.57f, 0.96f, scale, Hex(0x18, 0x20, 0x2D, 1f), Hex(0xC4, 0x5A, 0x28, 0.82f), false);
+        DrawPerspectivePerson(Screen.width * 0.28f, Screen.height * 0.53f, 0.82f, scale, Hex(0x26, 0x2A, 0x31, 1f), Hex(0xD2, 0x8A, 0x35, 0.72f), true);
+        DrawPerspectivePerson(Screen.width * 0.36f, Screen.height * 0.49f, 0.66f, scale, Hex(0x10, 0x18, 0x26, 1f), Hex(0xE2, 0xD8, 0xC4, 0.66f), false);
+        DrawPerspectivePerson(Screen.width * 0.44f, Screen.height * 0.55f, 0.86f, scale, Hex(0x1B, 0x14, 0x24, 1f), Hex(0xC4, 0x5A, 0x28, 0.78f), true);
+        DrawPerspectivePerson(Screen.width * 0.70f, Screen.height * 0.54f, 0.72f, scale, Hex(0x2D, 0x3E, 0x52, 1f), Hex(0xD2, 0x8A, 0x35, 0.75f), false);
+        DrawPerspectivePerson(Screen.width * 0.87f, Screen.height * 0.58f, 0.90f, scale, Hex(0x10, 0x18, 0x26, 1f), Hex(0xE2, 0xD8, 0xC4, 0.72f), false);
+        DrawPerspectivePerson(Screen.width * 0.73f, Screen.height * 0.30f, 0.44f, scale, Hex(0x26, 0x2A, 0x31, 1f), Hex(0xC4, 0x5A, 0x28, 0.65f), true);
+    }
+
+    void DrawAtmosphereHaze(float scale)
+    {
+        FillTrapezoid(Screen.width * 0.28f, Screen.width * 0.72f, Screen.width * 0.02f, Screen.width * 0.98f, Screen.height * 0.36f, Screen.height * 0.78f, Hex(0xD2, 0x8A, 0x35, 0.045f));
+        Fill(new Rect(0, Screen.height * 0.42f, Screen.width, Mathf.Round(20f * scale)), Hex(0x8F, 0xC9, 0xD6, 0.035f));
+        for (int i = 0; i < 8; i++)
+        {
+            float x = Mathf.Repeat(Time.time * 11f + i * 113f, Screen.width);
+            Fill(new Rect(x, Screen.height * (0.30f + (i % 4) * 0.08f), Mathf.Round(70f * scale), Mathf.Max(1f, scale)), Hex(0x9A, 0xA3, 0xA8, 0.05f));
+        }
+    }
+
+    void DrawHangingLamp(float x, float y, float scale, float brightness)
+    {
+        Fill(new Rect(x - scale, 0, Mathf.Max(1f, scale), y), Hex(0x42, 0x50, 0x61, 0.28f));
+        Fill(new Rect(x - 12f * scale, y, 24f * scale, 6f * scale), Hex(0xD2, 0x8A, 0x35, 0.58f * brightness));
+        FillTrapezoid(x - 18f * scale, x + 18f * scale, x - 88f * scale, x + 88f * scale, y + 6f * scale, y + 190f * scale, Hex(0xD2, 0x8A, 0x35, 0.055f * brightness));
     }
 
     void DrawBarCounter(float scale)
@@ -473,24 +589,40 @@ public class DrifterActionToolbar : MonoBehaviour
 
     void DrawDetectiveInBar(float scale)
     {
-        float u = Mathf.Max(2f, Mathf.Round(3f * scale));
-        float x = Screen.width * 0.25f;
-        float y = Screen.height * 0.57f;
+        float u = Mathf.Max(2f, Mathf.Round(4f * scale));
+        float x = Screen.width * 0.34f;
+        float y = Screen.height * 0.67f;
         Color coat = Hex(0x18, 0x20, 0x2D, 1f);
         Color hair = Hex(0x1B, 0x14, 0x24, 1f);
         Color skin = Hex(0xC4, 0x5A, 0x28, 0.82f);
 
-        Fill(new Rect(x - u * 8f, y + u * 17f, u * 18f, u * 3f), Hex(0x00, 0x00, 0x00, 0.36f));
+        Fill(new Rect(x - u * 10f, y + u * 17f, u * 22f, u * 3f), Hex(0x00, 0x00, 0x00, 0.40f));
         Fill(new Rect(x - u * 3f, y - u * 9f, u * 7f, u * 6f), skin);
-        Fill(new Rect(x - u * 5f, y - u * 10f, u * 6f, u * 9f), hair);
-        Fill(new Rect(x + u * 2f, y - u * 7f, u * 4f, u * 7f), hair);
+        Fill(new Rect(x - u * 6f, y - u * 10f, u * 7f, u * 13f), hair);
+        Fill(new Rect(x + u * 2f, y - u * 8f, u * 5f, u * 10f), hair);
         Fill(new Rect(x - u * 5f, y - u * 2f, u * 11f, u * 19f), coat);
-        Fill(new Rect(x - u * 2f, y + u, u * 5f, u * 12f), Hex(0xE2, 0xD8, 0xC4, 0.42f));
+        Fill(new Rect(x - u * 2f, y + u, u * 5f, u * 12f), Hex(0xE2, 0xD8, 0xC4, 0.46f));
         Fill(new Rect(x - u * 8f, y + u, u * 4f, u * 12f), coat);
         Fill(new Rect(x + u * 5f, y + u * 1f, u * 3f, u * 13f), coat);
         Fill(new Rect(x - u * 5f, y + u * 17f, u * 4f, u * 9f), Hex(0x10, 0x18, 0x26, 1f));
         Fill(new Rect(x + u * 2f, y + u * 17f, u * 4f, u * 9f), Hex(0x10, 0x18, 0x26, 1f));
         Fill(new Rect(x - u * 5f, y + u * 25f, u * 7f, u * 2f), Amber);
+    }
+
+    void DrawPerspectivePerson(float x, float y, float size, float scale, Color coat, Color face, bool turned)
+    {
+        float u = Mathf.Max(1f, Mathf.Round(3f * scale * size));
+        Color shadow = Hex(0x00, 0x00, 0x00, 0.34f);
+        Fill(new Rect(x - u * 6f, y + u * 13f, u * 13f, Mathf.Max(2f, u * 2f)), shadow);
+        Fill(new Rect(x - u * 2f, y - u * 7f, u * 5f, u * 5f), face);
+        Fill(new Rect(x - u * 3f, y - u * 8f, u * 3f, u * 8f), Hex(0x1B, 0x14, 0x24, 1f));
+        Fill(new Rect(x + u * 2f, y - u * 6f, u * 2f, u * 6f), Hex(0x1B, 0x14, 0x24, 0.92f));
+        Fill(new Rect(x - u * 4f, y - u * 2f, u * 9f, u * 14f), coat);
+        Fill(new Rect(x - u, y, u * 3f, u * 9f), turned ? Hex(0xD2, 0x8A, 0x35, 0.24f) : Hex(0xE2, 0xD8, 0xC4, 0.26f));
+        Fill(new Rect(x - u * 6f, y, u * 2f, u * 9f), coat);
+        Fill(new Rect(x + u * 5f, y + u, u * 2f, u * 9f), coat);
+        Fill(new Rect(x - u * 4f, y + u * 12f, u * 3f, u * 7f), Hex(0x09, 0x0B, 0x0F, 1f));
+        Fill(new Rect(x + u * 2f, y + u * 12f, u * 3f, u * 7f), Hex(0x09, 0x0B, 0x0F, 1f));
     }
 
     void DrawPerson(float x, float y, float scale, Color coat, Color face)
@@ -841,6 +973,19 @@ public class DrifterActionToolbar : MonoBehaviour
         GUI.color = color;
         GUI.DrawTexture(rect, Texture2D.whiteTexture);
         GUI.color = old;
+    }
+
+    void FillTrapezoid(float topLeft, float topRight, float bottomLeft, float bottomRight, float topY, float bottomY, Color color)
+    {
+        int steps = Mathf.Max(1, Mathf.CeilToInt(bottomY - topY));
+        for (int i = 0; i < steps; i++)
+        {
+            float t = i / (float)steps;
+            float y = Mathf.Lerp(topY, bottomY, t);
+            float left = Mathf.Lerp(topLeft, bottomLeft, t);
+            float right = Mathf.Lerp(topRight, bottomRight, t);
+            Fill(new Rect(left, y, Mathf.Max(1f, right - left), 1f), color);
+        }
     }
 
     bool PrimaryClick(Event evt)
